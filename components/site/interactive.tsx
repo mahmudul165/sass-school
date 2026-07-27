@@ -6,6 +6,7 @@
 
 import { useActionState, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Icon, WhatsAppIcon, MessengerIcon } from "./icons";
 import { toBnDigits, toEnDigits } from "@/lib/digits";
 import { waLink } from "@/lib/utils";
@@ -129,7 +130,7 @@ export function MobileNav({ nav, name, logo, phone, whatsapp, accentClass = "bg-
           <div ref={panelRef} className="absolute inset-y-0 right-0 w-[86%] max-w-sm bg-white shadow-2xl flex flex-col animate-[slideIn_.28s_cubic-bezier(.22,1,.36,1)]">
             <style>{`@keyframes slideIn{from{transform:translateX(100%)}to{transform:none}}`}</style>
             <div className="flex items-center gap-3 p-4 border-b border-n-200">
-              {logo ? <img src={logo} alt="" className="h-10 w-10 rounded-lg object-contain" />
+              {logo ? <Image src={logo} alt="" width={40} height={40} className="h-10 w-10 rounded-lg object-contain" />
                 : <span className={`h-10 w-10 rounded-lg grid place-items-center text-white font-bold ${accentClass}`}>{name[0]}</span>}
               <p className="font-bold text-n-900 leading-tight flex-1 line-clamp-2">{name}</p>
               <button onClick={() => setOpen(false)} aria-label={L.close} className="h-10 w-10 grid place-items-center rounded-lg hover:bg-n-100">
@@ -356,6 +357,11 @@ export function Lightbox({ images, children, className = "" }: {
             </>
           )}
           <figure className="relative z-[1] max-w-5xl w-full text-center pointer-events-none">
+            {/* ইচ্ছাকৃতভাবে কাঁচা <img> — লাইটবক্সে ছবিটি নিজের অনুপাতে
+                (w-auto, max-h-78vh) বসে, তাই আগে থেকে width/height জানা নেই
+                আর `fill`-এর জন্য মাপ-নির্দিষ্ট মোড়কও নেই। এটি দর্শকের
+                ক্লিকে খোলে, প্রথম লোডে নয় — তাই LCP-তে কোনো প্রভাব নেই এবং
+                রূপান্তরের ঝুঁকি নেওয়ার মতো লাভও নেই। */}
             <img src={images[idx!].url} alt={images[idx!].caption || ""}
               className="max-h-[78vh] w-auto mx-auto rounded-xl object-contain shadow-2xl" />
             <figcaption className="mt-4 text-white/85 text-sm">
@@ -385,8 +391,9 @@ export function VideoEmbed({ youtubeId, title }: { youtubeId: string; title: str
   }
   return (
     <button onClick={() => setPlay(true)} className="group absolute inset-0 h-full w-full" aria-label={`ভিডিও চালান: ${title}`}>
-      <img src={`https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`} alt="" loading="lazy"
-        className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+      <Image src={`https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`} alt="" fill
+        sizes="(min-width: 768px) 50vw, 100vw"
+        className="object-cover transition duration-500 group-hover:scale-105" />
       <span className="absolute inset-0 bg-n-900/25 group-hover:bg-n-900/10 transition" />
       <span className="absolute inset-0 grid place-items-center">
         <span className="h-16 w-16 rounded-full grid place-items-center shadow-xl transition group-hover:scale-110"
@@ -551,9 +558,13 @@ export function HeroSlides({ images, alt, className = "" }: { images: string[]; 
   return (
     <div className={`absolute inset-0 ${className}`} aria-hidden={images.length > 1 ? "true" : undefined}>
       {images.map((src, n) => (
-        <img key={src} src={src} alt={n === 0 ? alt : ""} loading={n === 0 ? "eager" : "lazy"}
-          fetchPriority={n === 0 ? "high" : "low"}
-          className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1400ms] ease-out"
+        /* হিরোর ছবিই সাধারণত পাতার LCP উপাদান — এখানে next/image ব্যবহারের
+           লাভ সবচেয়ে বেশি: AVIF-এ একই ছবি প্রায়ই অর্ধেক বাইট, আর sizes
+           "100vw" বলায় ৩৬০px ফোনে ১৯২০px ভ্যারিয়েন্ট আর নামে না।
+           প্রথমটিতে priority, বাকিগুলো স্বাভাবিক নিয়মেই lazy। */
+        <Image key={src} src={src} alt={n === 0 ? alt : ""} fill sizes="100vw"
+          priority={n === 0}
+          className="object-cover transition-opacity duration-[1400ms] ease-out"
           style={{ opacity: n === i ? 1 : 0 }} />
       ))}
     </div>

@@ -14,6 +14,7 @@
    এক হাজার লাইন লিখলে একটিতে বাগ ঠিক করে বাকি চারটিতে ভুলে যাওয়া নিশ্চিত —
    তাই একটিই ভিত্তি, উপরে পাঁচটি ভিন্ন কনফিগ।
    ═══════════════════════════════════════════════════════════════ */
+import Image from "next/image";
 import { TLink } from "@/components/site/tlink";
 import type { Template, HomeData, NavItem, TenantX, Notice } from "./types";
 import { buildNav, footerLinks, show } from "./types";
@@ -154,7 +155,11 @@ function makeHeader(v: Variant): Template["Header"] {
           {v.girih && <span className="tex-girih absolute inset-0 opacity-[0.35] pointer-events-none" aria-hidden="true" />}
           <div className="container-x relative flex items-center gap-4 md:gap-6 py-4 md:py-5">
             {tenant.logo
-              ? <img src={tenant.logo} alt="" className={`h-16 w-16 md:h-20 md:w-20 object-contain shrink-0 ${v.chrome === "govt" ? "rounded-full ring-2 ring-brand-200 p-1" : ""}`} />
+              /* সাইনবোর্ডের লোগো প্রায়ই পাতার LCP উপাদান — priority দিলে
+                 এটি lazy সারিতে না দাঁড়িয়ে সঙ্গে সঙ্গে নামে। মাপ ৮০px
+                 (md-এর সর্বোচ্চ), ছোট পর্দায় CSS নামিয়ে আনে। */
+              ? <Image src={tenant.logo} alt="" width={80} height={80} priority
+                  className={`h-16 w-16 md:h-20 md:w-20 object-contain shrink-0 ${v.chrome === "govt" ? "rounded-full ring-2 ring-brand-200 p-1" : ""}`} />
               : <span className={`h-16 w-16 md:h-20 md:w-20 shrink-0 grid place-items-center text-white text-2xl md:text-3xl font-extrabold
                   ${v.chrome === "modern" ? "rounded-2xl" : "rounded-full"}`}
                   style={{ background: "linear-gradient(140deg, var(--brand-600), var(--brand-800))" }}>
@@ -744,8 +749,11 @@ function GalleryBand({ v, d }: { v: Variant; d: HomeData }) {
             {images.map((im, i) => (
               <button key={i} data-lb={i} className={`group relative aspect-[4/3] overflow-hidden ${v.r} border border-n-200`}
                 aria-label={`${t.navGallery}: ${im.caption || im.album}`}>
-                <img src={im.url} alt={im.caption || im.album} loading="lazy"
-                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                {/* গ্রিড ২ কলাম (মোবাইল) → ৪ কলাম (md) — sizes সেটিই বলে,
+                    তাই ফোনে অর্ধেক প্রস্থের ছবিই নামে, পূর্ণ প্রস্থের নয় */}
+                <Image src={im.url} alt={im.caption || im.album} fill
+                  sizes="(min-width: 768px) 25vw, 50vw"
+                  className="object-cover transition duration-500 group-hover:scale-105" />
                 <span className="absolute inset-0 bg-brand-900/0 group-hover:bg-brand-900/25 transition" />
               </button>
             ))}
@@ -971,7 +979,7 @@ function makeFooter(v: Variant): Template["Footer"] {
           <div>
             <div className="flex items-center gap-3">
               {tenant.logo
-                ? <img src={tenant.logo} alt="" className="h-14 w-14 object-contain" />
+                ? <Image src={tenant.logo} alt="" width={56} height={56} className="h-14 w-14 object-contain" />
                 : <span className="h-14 w-14 rounded-full grid place-items-center bg-white/10 text-white text-xl font-extrabold">{tenant.name[0]}</span>}
               <span className="min-w-0">
                 <span className={`block ${v.display} text-white font-bold text-[18px] leading-tight`}>{tenant.name}</span>
@@ -1162,8 +1170,9 @@ function makeGallerySection(v: Variant): Template["GallerySection"] {
                   {g.images.map((im, i) => (
                     <button key={i} data-lb={i} className={`group relative aspect-[4/3] overflow-hidden ${v.r} border border-n-200`}
                       aria-label={`${t.navGallery} — ${g.title}`}>
-                      <img src={im.url} alt={im.caption || g.title} loading="lazy"
-                        className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                      <Image src={im.url} alt={im.caption || g.title} fill
+                        sizes="(min-width: 768px) 25vw, 50vw"
+                        className="object-cover transition duration-500 group-hover:scale-105" />
                     </button>
                   ))}
                 </div>

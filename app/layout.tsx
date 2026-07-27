@@ -42,7 +42,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  /* ব্রাউজারের ঠিকানা-পট্টিও পাতার সুরে চলে — ডার্ক মোডে সাদা পট্টি
+     গাঢ় পাতার উপর উজ্জ্বল ফালি হয়ে থাকত। রঙটি globals.css-এর
+     ডার্ক --n-0 এর সমান। */
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f1512" },
+  ],
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",

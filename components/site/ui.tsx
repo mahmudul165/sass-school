@@ -1,6 +1,7 @@
 /* সার্ভার-রেন্ডারযোগ্য প্রিমিটিভ — তিনটি টেমপ্লেটই এগুলো ব্যবহার করে,
    কিন্তু variant/className দিয়ে নিজের চেহারা দেয়। কোনো "use client" নেই,
    তাই এগুলো বান্ডলে যায় না — শুধু HTML যায়। */
+import Image from "next/image";
 import { TLink } from "@/components/site/tlink";
 import { Icon } from "./icons";
 import { bnDate } from "@/lib/utils";
@@ -209,15 +210,23 @@ export function MapEmbed({ src, address, className = "", height = "h-[380px]" }:
    এটাই ডেমো সাইটকে "ফাঁকা" নয়, "ডিজাইনড" দেখায়। */
 export function Figure({
   src, alt, className = "", ratio = "aspect-[4/3]", icon = "images", rounded = "rounded-2xl", priority,
+  sizes = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw",
 }: {
   src?: string; alt: string; className?: string; ratio?: string; icon?: string; rounded?: string; priority?: boolean;
+  sizes?: string;
 }) {
   return (
     <div className={`relative overflow-hidden ${ratio} ${rounded} bg-n-100 ${className}`}>
       {src ? (
-        <img src={src} alt={alt} loading={priority ? "eager" : "lazy"}
-          fetchPriority={priority ? "high" : "auto"} decoding="async"
-          className="absolute inset-0 h-full w-full object-cover" />
+        /* next/image — next.config.ts-এ AVIF→WebP, বাংলাদেশি পর্দার মাপে
+           কাটা deviceSizes ও ৩০ দিনের ক্যাশ আগে থেকেই সাজানো ছিল, কিন্তু
+           সাইটের একটিও ছবি সেই পথ দিয়ে যেত না — সবই কাঁচা <img> ছিল।
+           `fill` ব্যবহার করা হলো কারণ মোড়কটি ইতিমধ্যেই relative + aspect-*,
+           তাই মাপ CSS-ই ঠিক করে এবং CLS শূন্য থাকে।
+           `sizes` না দিলে next/image সবচেয়ে বড় ভ্যারিয়েন্ট নামায় — কার্ডের
+           ছবিতে সেটি কয়েকশ kB অপচয়, তাই ডিফল্টটি গ্রিড-কার্ড ধরে বসানো। */
+        <Image src={src} alt={alt} fill sizes={sizes} priority={priority}
+          className="object-cover" />
       ) : (
         <span className="absolute inset-0 grid place-items-center"
           style={{ background: "linear-gradient(135deg, var(--brand-50), var(--brand-100))" }}>
@@ -233,7 +242,10 @@ export function Avatar({ src, name, size = 56, className = "", rounded = "rounde
   src?: string; name: string; size?: number; className?: string; rounded?: string;
 }) {
   if (src) {
-    return <img src={src} alt={name} loading="lazy" width={size} height={size}
+    /* স্থির পিক্সেল মাপ, তাই fill নয় — width/height সরাসরি।
+       ৫২–৯০px মাপগুলো next.config.ts-এর imageSizes [64,96,128…]-এর সাথে
+       মেলে, ফলে ২× পর্দার জন্যও ঠিক মাপের ভ্যারিয়েন্ট তৈরি হয়। */
+    return <Image src={src} alt={name} width={size} height={size}
       className={`${rounded} object-cover shrink-0 ${className}`} style={{ width: size, height: size }} />;
   }
   return (
