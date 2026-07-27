@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="মাদরাসা প্রাঙ্গণ — গম্বুজ, মিনার ও খিলান">
+  <defs>
+    <linearGradient id="msky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0d3b2e"/><stop offset="0.5" stop-color="#1c5f47"/><stop offset="1" stop-color="#3d8060"/>
+    </linearGradient>
+    <linearGradient id="mwall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6efdd"/><stop offset="1" stop-color="#e2d4b4"/>
+    </linearGradient>
+    <linearGradient id="dome" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e3c766"/><stop offset="1" stop-color="#b4892a"/>
+    </linearGradient>
+    <pattern id="girih" width="60" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="60" height="60" fill="none"/>
+      <path d="M30 0v60M0 30h60" stroke="#c9a227" stroke-width="1.2" opacity="0.35"/>
+      <rect x="15" y="15" width="30" height="30" fill="none" stroke="#c9a227" stroke-width="1.2" opacity="0.3"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#msky)"/>
+  <rect width="1600" height="900" fill="url(#girih)" opacity="0.5"/>
+
+  <!-- চাঁদ ও তারা -->
+  <g fill="#f2e2ab" opacity="0.9">
+    <path d="M1338 150a70 70 0 1 0 44 124 56 56 0 1 1-44-124z"/>
+    <circle cx="1236" cy="128" r="5"/><circle cx="1180" cy="212" r="4"/><circle cx="1420" cy="236" r="4.5"/>
+    <circle cx="300" cy="140" r="4"/><circle cx="420" cy="200" r="3.5"/><circle cx="180" cy="238" r="4.5"/>
+  </g>
+
+  <!-- মিনার (দুই পাশে) -->
+  <g fill="url(#mwall)">
+    <rect x="250" y="300" width="66" height="330"/>
+    <rect x="1284" y="300" width="66" height="330"/>
+  </g>
+  <g fill="url(#dome)">
+    <path d="M250 300a33 62 0 0 1 66 0z"/><path d="M1284 300a33 62 0 0 1 66 0z"/>
+    <rect x="279" y="212" width="8" height="30"/><rect x="1313" y="212" width="8" height="30"/>
+  </g>
+  <g fill="#0e4433" opacity="0.5">
+    <rect x="266" y="360" width="34" height="52" rx="17"/><rect x="1300" y="360" width="34" height="52" rx="17"/>
+    <rect x="266" y="452" width="34" height="52" rx="17"/><rect x="1300" y="452" width="34" height="52" rx="17"/>
+  </g>
+
+  <!-- মূল ভবন -->
+  <rect x="360" y="360" width="880" height="270" fill="url(#mwall)"/>
+  <rect x="360" y="360" width="880" height="18" fill="#c9a227"/>
+
+  <!-- কেন্দ্রীয় গম্বুজ -->
+  <g>
+    <path d="M660 360a140 168 0 0 1 280 0z" fill="url(#dome)"/>
+    <rect x="796" y="150" width="9" height="46" fill="#c9a227"/>
+    <circle cx="800" cy="146" r="13" fill="#e3c766"/>
+    <rect x="640" y="352" width="320" height="16" fill="#b4892a"/>
+  </g>
+
+  <!-- মিহরাব খিলান -->
+  <g fill="#0e4433">
+    <path d="M760 630V500a40 40 0 0 1 80 0v130z" opacity="0.85"/>
+    <path d="M560 630V520a34 34 0 0 1 68 0v110z" opacity="0.6"/>
+    <path d="M972 630V520a34 34 0 0 1 68 0v110z" opacity="0.6"/>
+    <path d="M452 630V536a26 26 0 0 1 52 0v94z" opacity="0.45"/>
+    <path d="M1096 630V536a26 26 0 0 1 52 0v94z" opacity="0.45"/>
+  </g>
+  <path d="M760 500a40 40 0 0 1 80 0" fill="none" stroke="#c9a227" stroke-width="4"/>
+
+  <!-- প্রাঙ্গণ -->
+  <rect x="0" y="630" width="1600" height="270" fill="#12503c"/>
+  <rect x="0" y="630" width="1600" height="12" fill="#c9a227" opacity="0.55"/>
+  <rect x="0" y="630" width="1600" height="270" fill="url(#girih)" opacity="0.35"/>
+
+  <!-- তালিবুল ইলম (পাঞ্জাবি-টুপি) -->
+  <g>
+    <g transform="translate(600 690)">
+      <ellipse cx="0" cy="-52" rx="17" ry="12" fill="#f6efdd"/><circle cx="0" cy="-40" r="15" fill="#8a5a3b"/>
+      <path d="M-18 -26h36l7 78h-50z" fill="#f6efdd"/><rect x="-14" y="52" width="28" height="46" fill="#0e4433"/>
+    </g>
+    <g transform="translate(668 702)">
+      <ellipse cx="0" cy="-50" rx="16" ry="11" fill="#e9dcc0"/><circle cx="0" cy="-38" r="14" fill="#7a4a30"/>
+      <path d="M-17 -24h34l6 74h-46z" fill="#eae0c9"/><rect x="-13" y="50" width="26" height="44" fill="#0e4433"/>
+    </g>
+    <g transform="translate(960 694)">
+      <ellipse cx="0" cy="-52" rx="17" ry="12" fill="#f6efdd"/><circle cx="0" cy="-40" r="15" fill="#93643f"/>
+      <path d="M-18 -26h36l7 78h-50z" fill="#f6efdd"/><rect x="-14" y="52" width="28" height="46" fill="#0e4433"/>
+      <rect x="14" y="10" width="34" height="24" rx="3" fill="#c9a227"/>
+    </g>
+  </g>
+
+  <!-- খেজুর গাছ -->
+  <g stroke="#8a6b3d" stroke-width="12" fill="none" stroke-linecap="round">
+    <path d="M140 640V470"/><path d="M1470 650V486"/>
+  </g>
+  <g fill="#2f7d55">
+    <path d="M140 470c-60-10-92 22-104 56 44-14 78-16 104-30zM140 470c60-10 92 22 104 56-44-14-78-16-104-30zM140 464c-14-52 12-84 44-98-8 44-16 74-30 98zM140 464c14-52-12-84-44-98 8 44 16 74 30 98z"/>
+    <path d="M1470 486c-58-10-90 22-102 56 44-14 76-16 102-30zM1470 486c58-10 90 22 102 56-44-14-76-16-102-30zM1470 480c-14-50 12-82 44-96-8 44-16 72-30 96z"/>
+  </g>
+</svg>

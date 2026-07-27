@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="বিজ্ঞান গবেষণাগার">
+  <defs>
+    <linearGradient id="lwall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eaf1f2"/><stop offset="1" stop-color="#d6e2e4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#lwall)"/>
+  <rect y="660" width="1600" height="240" fill="#b9c6c8"/>
+  <g stroke="#a9b8ba" stroke-width="3" opacity="0.7">
+    <path d="M0 720h1600M0 790h1600M200 660v240M600 660v240M1000 660v240M1400 660v240"/>
+  </g>
+
+  <!-- তাক -->
+  <g>
+    <rect x="120" y="180" width="440" height="16" rx="4" fill="#8d7c62"/>
+    <rect x="120" y="330" width="440" height="16" rx="4" fill="#8d7c62"/>
+    <g fill="#7fb6c4" opacity="0.85">
+      <rect x="150" y="120" width="40" height="60" rx="6"/><rect x="210" y="132" width="34" height="48" rx="6"/>
+      <rect x="270" y="112" width="46" height="68" rx="6"/><rect x="340" y="136" width="32" height="44" rx="6"/>
+      <rect x="400" y="120" width="42" height="60" rx="6"/><rect x="470" y="140" width="30" height="40" rx="6"/>
+      <rect x="160" y="278" width="46" height="52" rx="6"/><rect x="230" y="266" width="38" height="64" rx="6"/>
+      <rect x="300" y="286" width="42" height="44" rx="6"/><rect x="370" y="270" width="34" height="60" rx="6"/>
+      <rect x="430" y="282" width="44" height="48" rx="6"/>
+    </g>
+  </g>
+
+  <!-- পর্যায় সারণি পোস্টার -->
+  <g transform="translate(1180 160)">
+    <rect x="0" y="0" width="300" height="200" rx="8" fill="#fbf9f2" stroke="#8d7c62" stroke-width="6"/>
+    <g fill="#4a7a99" opacity="0.75">
+      <rect x="20" y="24" width="26" height="26"/><rect x="248" y="24" width="26" height="26"/>
+      <rect x="20" y="60" width="26" height="26"/><rect x="52" y="60" width="26" height="26"/>
+      <rect x="180" y="60" width="26" height="26"/><rect x="212" y="60" width="26" height="26"/><rect x="248" y="60" width="26" height="26"/>
+      <rect x="20" y="96" width="26" height="26"/><rect x="52" y="96" width="26" height="26"/>
+      <rect x="148" y="96" width="26" height="26"/><rect x="180" y="96" width="26" height="26"/><rect x="212" y="96" width="26" height="26"/><rect x="248" y="96" width="26" height="26"/>
+    </g>
+    <g fill="#d98324" opacity="0.8">
+      <rect x="84" y="132" width="26" height="26"/><rect x="116" y="132" width="26" height="26"/><rect x="148" y="132" width="26" height="26"/>
+      <rect x="180" y="132" width="26" height="26"/><rect x="212" y="132" width="26" height="26"/>
+    </g>
+  </g>
+
+  <!-- বেঞ্চ -->
+  <rect x="220" y="560" width="1160" height="30" rx="8" fill="#3f4f52"/>
+  <rect x="260" y="590" width="24" height="120" fill="#2f3c3e"/>
+  <rect x="1316" y="590" width="24" height="120" fill="#2f3c3e"/>
+
+  <!-- যন্ত্রপাতি -->
+  <g>
+    <!-- কনিক্যাল ফ্লাস্ক -->
+    <g transform="translate(420 560)">
+      <path d="M-8 -96h16v40l40 90a10 10 0 0 1-9 14h-78a10 10 0 0 1-9-14l40-90z" fill="#dff0f4" stroke="#7fa9b5" stroke-width="4"/>
+      <path d="M-38 24h76l14 30a10 10 0 0 1-9 14h-86a10 10 0 0 1-9-14z" fill="#5bb6a4"/>
+      <circle cx="-14" cy="12" r="5" fill="#5bb6a4" opacity="0.7"/><circle cx="10" cy="-4" r="4" fill="#5bb6a4" opacity="0.6"/>
+    </g>
+    <!-- টেস্টটিউব র‌্যাক -->
+    <g transform="translate(700 560)">
+      <rect x="-70" y="-16" width="140" height="14" rx="4" fill="#8d7c62"/>
+      <rect x="-70" y="-2" width="10" height="18" fill="#8d7c62"/><rect x="60" y="-2" width="10" height="18" fill="#8d7c62"/>
+      <g stroke="#7fa9b5" stroke-width="3">
+        <rect x="-56" y="-90" width="24" height="86" rx="12" fill="#dff0f4"/>
+        <rect x="-12" y="-90" width="24" height="86" rx="12" fill="#dff0f4"/>
+        <rect x="32" y="-90" width="24" height="86" rx="12" fill="#dff0f4"/>
+      </g>
+      <rect x="-54" y="-44" width="20" height="38" rx="10" fill="#e0685f"/>
+      <rect x="-10" y="-32" width="20" height="26" rx="10" fill="#e3b93c"/>
+      <rect x="34" y="-50" width="20" height="44" rx="10" fill="#5b8fc9"/>
+    </g>
+    <!-- অণুবীক্ষণ যন্ত্র -->
+    <g transform="translate(1080 560)">
+      <path d="M-50 0h100l-8-16h-84z" fill="#2f3c3e"/>
+      <rect x="-8" y="-96" width="18" height="80" rx="6" fill="#48595c"/>
+      <path d="M10 -96c34 10 40 46 18 66l-16-12c12-12 8-30-10-38z" fill="#48595c"/>
+      <rect x="-16" y="-116" width="34" height="26" rx="6" fill="#2f3c3e"/>
+      <rect x="-34" y="-40" width="60" height="8" fill="#7fa9b5"/>
+    </g>
+  </g>
+
+  <!-- শিক্ষার্থী -->
+  <g transform="translate(880 470)">
+    <circle cx="0" cy="0" r="28" fill="#8a5a3b"/>
+    <path d="M-34 26h68l14 120h-96z" fill="#ffffff"/>
+    <path d="M-34 26l-30 74 22 12 26-56z" fill="#f3f3f3"/>
+    <rect x="-26" y="146" width="52" height="30" fill="#22345c"/>
+  </g>
+  <g transform="translate(560 480)">
+    <circle cx="0" cy="0" r="26" fill="#7a4a30"/>
+    <path d="M-32 24h64l12 112h-88z" fill="#f7f3ea"/>
+    <rect x="-24" y="136" width="48" height="26" fill="#1f5b4b"/>
+  </g>
+</svg>

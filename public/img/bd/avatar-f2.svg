@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800" role="img" aria-label="ছাত্রীর প্রতিকৃতি">
+  <defs><linearGradient id="bgf2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8e6f2"/><stop offset="1" stop-color="#d3d0e4"/></linearGradient></defs>
+  <rect width="600" height="800" fill="url(#bgf2)"/>
+  <circle cx="300" cy="330" r="200" fill="#ffffff" opacity="0.45"/>
+  <g>
+    <path d="M300 470c-118 0-206 62-224 170-4 24-6 44-6 60h460c0-16-2-36-6-60-18-108-106-170-224-170z" fill="#ffffff"/>
+    <path d="M300 470c-24 0-46 2-68 8v252h136V478c-22-6-44-8-68-8z" fill="#f7f3ea"/>
+    <path d="M258 478h84l-42 52-42-52z" fill="#1f5b4b"/>
+    <!-- ওড়না -->
+    <path d="M232 486l-24 214h44l52-176-72-38zM368 486l24 214h-44l-52-176 72-38z" fill="#1f5b4b" opacity="0.85"/>
+    <rect x="254" y="392" width="92" height="104" rx="32" fill="#96633f"/>
+    <circle cx="300" cy="320" r="114" fill="#a97049"/>
+    <path d="M300 200c-66 0-112 46-112 108 0 16 2 28 6 38 6-42 24-62 46-70-4 22 4 40 20 48-8-26 0-46 20-56 26 22 78 24 100 4 12 16 18 42 20 74 4-10 6-22 6-38 0-62-40-108-106-108z" fill="#2b1f1a"/>
+    <!-- বেণী -->
+    <path d="M196 350c-16 26-14 68 6 108 12-2 22-10 26-20-14-28-20-58-32-88zM404 350c16 26 14 68-6 108-12-2-22-10-26-20 14-28 20-58 32-88z" fill="#2b1f1a"/>
+    <g fill="#2b1f1a"><ellipse cx="260" cy="318" rx="9" ry="12"/><ellipse cx="340" cy="318" rx="9" ry="12"/></g>
+    <path d="M236 284c12-8 30-8 42-2M322 282c12-6 30-6 42 2" stroke="#2b1f1a" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M278 370c14 12 30 12 44 0" stroke="#8f4a4a" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <g fill="#c94f4f"><circle cx="196" cy="320" r="9"/><circle cx="404" cy="320" r="9"/></g>
+  </g>
+</svg>

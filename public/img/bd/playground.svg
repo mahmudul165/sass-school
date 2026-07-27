@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="খেলার মাঠ — ফুটবল ও ক্রিকেট">
+  <defs>
+    <linearGradient id="psky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a8ceea"/><stop offset="0.7" stop-color="#d9e7e3"/><stop offset="1" stop-color="#eff0dd"/>
+    </linearGradient>
+    <linearGradient id="pfield" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7fae62"/><stop offset="1" stop-color="#54843f"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#psky)"/>
+  <g fill="#ffffff" opacity="0.65">
+    <ellipse cx="330" cy="150" rx="110" ry="38"/><ellipse cx="410" cy="132" rx="80" ry="32"/>
+    <ellipse cx="1210" cy="196" rx="130" ry="42"/><ellipse cx="1120" cy="180" rx="86" ry="34"/>
+  </g>
+
+  <!-- গাছের সারি -->
+  <g>
+    <g fill="#3a7a50" opacity="0.65">
+      <ellipse cx="90" cy="430" rx="86" ry="66"/><ellipse cx="240" cy="446" rx="72" ry="54"/>
+      <ellipse cx="1360" cy="436" rx="94" ry="70"/><ellipse cx="1520" cy="452" rx="76" ry="56"/>
+    </g>
+    <g fill="#6b5136"><rect x="82" y="480" width="14" height="60"/><rect x="234" y="490" width="12" height="52"/>
+      <rect x="1354" y="486" width="14" height="58"/><rect x="1514" y="496" width="12" height="50"/></g>
+  </g>
+
+  <!-- স্কুল ভবন দূরে -->
+  <g opacity="0.8">
+    <rect x="560" y="356" width="480" height="184" fill="#f1e7d5"/>
+    <rect x="560" y="356" width="480" height="14" fill="#00674b"/>
+    <g fill="#4a7a99">
+      <rect x="596" y="392" width="46" height="56"/><rect x="668" y="392" width="46" height="56"/>
+      <rect x="740" y="392" width="46" height="56"/><rect x="884" y="392" width="46" height="56"/><rect x="956" y="392" width="46" height="56"/>
+    </g>
+    <rect x="794" y="440" width="64" height="100" fill="#3c6e8f"/>
+  </g>
+
+  <!-- মাঠ -->
+  <rect y="540" width="1600" height="360" fill="url(#pfield)"/>
+  <g stroke="#ffffff" stroke-width="5" fill="none" opacity="0.45">
+    <path d="M0 690h1600"/>
+    <ellipse cx="800" cy="690" rx="150" ry="46"/>
+  </g>
+
+  <!-- গোলপোস্ট -->
+  <g stroke="#f7f3ea" stroke-width="9" fill="none" opacity="0.9">
+    <path d="M120 620h190v-84H120zM120 620v-84"/>
+  </g>
+
+  <!-- ক্রিকেট স্টাম্প -->
+  <g stroke="#f0e3c8" stroke-width="7" opacity="0.95">
+    <path d="M1360 700v-80M1382 700v-80M1404 700v-80"/>
+    <path d="M1354 620h56" stroke-width="6"/>
+  </g>
+
+  <!-- খেলোয়াড় -->
+  <g>
+    <!-- দৌড়াচ্ছে -->
+    <g transform="translate(560 640)">
+      <circle cx="0" cy="-72" r="24" fill="#8a5a3b"/>
+      <path d="M-26 -48h52l10 62h-72z" fill="#ffffff"/>
+      <path d="M-26 -40l-46 26 10 20 44-22z" fill="#ffffff"/>
+      <path d="M26 -40l40 8-4 22-40-8z" fill="#ffffff"/>
+      <path d="M-20 14l-24 68 22 8 22-56z" fill="#c94f4f"/>
+      <path d="M14 14l26 62-20 12-28-52z" fill="#c94f4f"/>
+    </g>
+    <!-- বল -->
+    <circle cx="700" cy="726" r="22" fill="#f7f3ea" stroke="#2f3c3e" stroke-width="3"/>
+    <path d="M690 712l10 14 12-12" stroke="#2f3c3e" stroke-width="3" fill="none"/>
+
+    <!-- ব্যাটসম্যান -->
+    <g transform="translate(1230 660)">
+      <circle cx="0" cy="-70" r="24" fill="#7a4a30"/>
+      <path d="M-26 -46h52l10 60h-72z" fill="#f7f3ea"/>
+      <path d="M-22 14l-20 66 22 8 20-54z" fill="#22345c"/>
+      <path d="M14 14l24 60-20 12-26-50z" fill="#22345c"/>
+      <g stroke="#a9793f" stroke-width="10" stroke-linecap="round"><path d="M24 -30l46 44"/></g>
+    </g>
+
+    <!-- দর্শক শিক্ষার্থী -->
+    <g transform="translate(920 700)">
+      <g><circle cx="0" cy="-40" r="18" fill="#93643f"/><path d="M-20 -20h40l8 48h-56z" fill="#ffffff"/><rect x="-16" y="28" width="32" height="40" fill="#1f5b4b"/></g>
+      <g transform="translate(62 8)"><circle cx="0" cy="-40" r="18" fill="#83502f"/><path d="M-20 -20h40l8 46h-56z" fill="#f7f3ea"/><rect x="-16" y="26" width="32" height="38" fill="#22345c"/></g>
+    </g>
+  </g>
+</svg>

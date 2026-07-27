@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800" role="img" aria-label="উস্তাযের প্রতিকৃতি">
+  <defs>
+    <linearGradient id="bgu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e3ece5"/><stop offset="1" stop-color="#c9dccf"/></linearGradient>
+    <pattern id="gu" width="48" height="48" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <path d="M24 0v48M0 24h48" stroke="#0b5d3b" stroke-width="1" opacity="0.14"/>
+    </pattern>
+  </defs>
+  <rect width="600" height="800" fill="url(#bgu)"/>
+  <rect width="600" height="800" fill="url(#gu)"/>
+  <circle cx="300" cy="330" r="200" fill="#ffffff" opacity="0.4"/>
+  <g>
+    <path d="M300 470c-118 0-206 62-224 170-4 24-6 44-6 60h460c0-16-2-36-6-60-18-108-106-170-224-170z" fill="#f6efdd"/>
+    <path d="M300 470c-30 0-58 4-84 12l84 130 84-130c-26-8-54-12-84-12z" fill="#eae0c9"/>
+    <path d="M300 496l-10 204h20l-10-204z" fill="#d8caa9"/>
+    <!-- কাঁধে চাদর -->
+    <path d="M216 482l-40 218h58l40-206-58-12zM384 482l40 218h-58l-40-206 58-12z" fill="#0b5d3b" opacity="0.9"/>
+    <rect x="254" y="392" width="92" height="106" rx="32" fill="#8a5a3b"/>
+    <circle cx="300" cy="322" r="114" fill="#96633f"/>
+    <!-- দাড়ি -->
+    <path d="M188 322c0 90 50 152 112 152s112-62 112-152c0 0-14 84-112 84s-112-84-112-84z" fill="#e9e4dc"/>
+    <path d="M212 366c8 76 46 116 88 116s80-40 88-116c-16 60-48 88-88 88s-72-28-88-88z" fill="#f6f3ee"/>
+    <!-- টুপি -->
+    <path d="M182 246h236c0-52-52-86-118-86s-118 34-118 86z" fill="#f6efdd"/>
+    <rect x="176" y="240" width="248" height="30" rx="12" fill="#eae0c9"/>
+    <g stroke="#c9a227" stroke-width="3" opacity="0.8" fill="none">
+      <path d="M182 224h236M196 202h208M216 182h168"/>
+    </g>
+    <g fill="#2b1f1a"><ellipse cx="260" cy="316" rx="9" ry="11"/><ellipse cx="340" cy="316" rx="9" ry="11"/></g>
+    <path d="M236 282c12-8 30-8 42-2M322 280c12-6 30-6 42 2" stroke="#3a2b24" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M278 364c14 10 30 10 44 0" stroke="#7b4f31" stroke-width="7" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>

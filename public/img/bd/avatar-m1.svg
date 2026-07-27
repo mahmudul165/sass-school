@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800" role="img" aria-label="শিক্ষকের প্রতিকৃতি">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6eef1"/><stop offset="1" stop-color="#cfdde2"/></linearGradient></defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <circle cx="300" cy="330" r="200" fill="#ffffff" opacity="0.4"/>
+  <g>
+    <path d="M300 470c-118 0-206 62-224 170-4 24-6 44-6 60h460c0-16-2-36-6-60-18-108-106-170-224-170z" fill="#22345c"/>
+    <path d="M300 470c-30 0-58 4-84 12l84 128 84-128c-26-8-54-12-84-12z" fill="#f7f3ea"/>
+    <path d="M270 476h60l-30 46-30-46z" fill="#8f2340"/>
+    <path d="M300 496l-14 92 14 26 14-26-14-92z" fill="#8f2340"/>
+    <rect x="252" y="392" width="96" height="110" rx="34" fill="#8a5a3b"/>
+    <circle cx="300" cy="320" r="118" fill="#96633f"/>
+    <path d="M300 196c-70 0-118 46-118 112 0 14 2 26 6 36 6-46 40-64 112-64s106 18 112 64c4-10 6-22 6-36 0-66-48-112-118-112z" fill="#2b1f1a"/>
+    <path d="M240 442c18 14 38 22 60 22s42-8 60-22c-16 26-36 40-60 40s-44-14-60-40z" fill="#7b4f31" opacity="0.5"/>
+    <g fill="#2b1f1a"><ellipse cx="258" cy="318" rx="10" ry="12"/><ellipse cx="342" cy="318" rx="10" ry="12"/></g>
+    <path d="M262 372c14 14 62 14 76 0" stroke="#5f3a24" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M236 286c14-10 32-10 44-2M320 284c12-8 30-8 44 2" stroke="#2b1f1a" stroke-width="9" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>

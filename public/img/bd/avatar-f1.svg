@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800" role="img" aria-label="শিক্ষিকার প্রতিকৃতি">
+  <defs><linearGradient id="bgf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2e9e4"/><stop offset="1" stop-color="#e0d2ca"/></linearGradient></defs>
+  <rect width="600" height="800" fill="url(#bgf)"/>
+  <circle cx="300" cy="330" r="200" fill="#ffffff" opacity="0.4"/>
+  <g>
+    <path d="M300 470c-118 0-206 62-224 170-4 24-6 44-6 60h460c0-16-2-36-6-60-18-108-106-170-224-170z" fill="#8f2340"/>
+    <!-- আঁচল -->
+    <path d="M300 470c-40 0-76 6-106 18l-6 212h44l68-230z" fill="#c9a227" opacity="0.85"/>
+    <path d="M406 488c-14-6-30-11-46-14l60 226h34l-6-192-42-20z" fill="#b8324f"/>
+    <rect x="252" y="392" width="96" height="110" rx="34" fill="#a06a45"/>
+    <circle cx="300" cy="320" r="118" fill="#a97049"/>
+    <!-- চুল ও খোঁপা -->
+    <path d="M300 192c-74 0-124 50-124 118 0 22 4 40 12 54 2-52 24-80 52-92 22 34 98 40 130 10 14 14 22 44 22 82 8-14 12-32 12-54 0-68-50-118-104-118z" fill="#2b1f1a"/>
+    <path d="M182 330c-18 6-26 26-18 44 6 14 20 20 32 16z" fill="#2b1f1a"/>
+    <path d="M418 330c18 6 26 26 18 44-6 14-20 20-32 16z" fill="#2b1f1a"/>
+    <g fill="#2b1f1a"><ellipse cx="258" cy="318" rx="10" ry="12"/><ellipse cx="342" cy="318" rx="10" ry="12"/></g>
+    <path d="M234 284c14-10 32-10 44-2M322 282c12-8 30-8 44 2" stroke="#2b1f1a" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M276 372c14 12 34 12 48 0" stroke="#8f4a4a" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <circle cx="300" cy="228" r="7" fill="#c94f4f"/>
+  </g>
+</svg>

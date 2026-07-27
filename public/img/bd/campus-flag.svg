@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="বাংলাদেশের একটি বিদ্যালয় প্রাঙ্গণ — জাতীয় পতাকা উড়ছে">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cfe3ee"/><stop offset="0.55" stop-color="#e8eee2"/><stop offset="1" stop-color="#f5efdf"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fb46f"/><stop offset="1" stop-color="#6d9a54"/>
+    </linearGradient>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbf6ec"/><stop offset="1" stop-color="#ecdfc9"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <circle cx="1290" cy="180" r="86" fill="#f4a259" opacity="0.35"/>
+  <circle cx="1290" cy="180" r="58" fill="#ef7f45" opacity="0.55"/>
+
+  <!-- দূরের গাছপালা -->
+  <g opacity="0.35" fill="#3f7a55">
+    <ellipse cx="120" cy="560" rx="130" ry="72"/><ellipse cx="300" cy="572" rx="150" ry="60"/>
+    <ellipse cx="1420" cy="566" rx="170" ry="70"/><ellipse cx="1230" cy="578" rx="120" ry="52"/>
+  </g>
+
+  <!-- মূল ভবন -->
+  <g>
+    <rect x="380" y="300" width="840" height="300" fill="url(#wall)"/>
+    <rect x="380" y="300" width="840" height="26" fill="#c9a227"/>
+    <rect x="380" y="588" width="840" height="14" fill="#d9cbb2"/>
+    <!-- সিঁড়িঘর / কেন্দ্রীয় খিলান -->
+    <rect x="720" y="236" width="160" height="364" fill="#f8f2e6"/>
+    <rect x="720" y="236" width="160" height="22" fill="#00674b"/>
+    <path d="M760 470h80v130h-80z" fill="#3c6e8f"/>
+    <path d="M800 236a40 40 0 0 1 40 40h-80a40 40 0 0 1 40-40z" fill="#00674b" opacity="0.9"/>
+    <!-- জানালার সারি -->
+    <g fill="#3c6e8f">
+      <rect x="420" y="356" width="66" height="82" rx="4"/><rect x="512" y="356" width="66" height="82" rx="4"/>
+      <rect x="604" y="356" width="66" height="82" rx="4"/><rect x="930" y="356" width="66" height="82" rx="4"/>
+      <rect x="1022" y="356" width="66" height="82" rx="4"/><rect x="1114" y="356" width="66" height="82" rx="4"/>
+      <rect x="420" y="474" width="66" height="82" rx="4"/><rect x="512" y="474" width="66" height="82" rx="4"/>
+      <rect x="604" y="474" width="66" height="82" rx="4"/><rect x="930" y="474" width="66" height="82" rx="4"/>
+      <rect x="1022" y="474" width="66" height="82" rx="4"/><rect x="1114" y="474" width="66" height="82" rx="4"/>
+    </g>
+    <g fill="#ffffff" opacity="0.35">
+      <rect x="420" y="356" width="66" height="26"/><rect x="512" y="356" width="66" height="26"/>
+      <rect x="604" y="356" width="66" height="26"/><rect x="930" y="356" width="66" height="26"/>
+      <rect x="1022" y="356" width="66" height="26"/><rect x="1114" y="356" width="66" height="26"/>
+    </g>
+  </g>
+
+  <!-- জাতীয় পতাকা -->
+  <g>
+    <rect x="236" y="250" width="7" height="360" fill="#8d7c62"/>
+    <rect x="243" y="258" width="180" height="108" rx="3" fill="#006a4e"/>
+    <circle cx="323" cy="312" r="32" fill="#f42a41"/>
+  </g>
+
+  <!-- মাঠ -->
+  <rect x="0" y="600" width="1600" height="300" fill="url(#ground)"/>
+  <path d="M0 600h1600v18H0z" fill="#5b8a46" opacity="0.6"/>
+  <!-- হাঁটার পথ -->
+  <path d="M700 900l100-300h60l100 300z" fill="#e3d9c2" opacity="0.85"/>
+
+  <!-- শিক্ষার্থী (সাদা-নেভি ইউনিফর্ম) -->
+  <g>
+    <g transform="translate(560 640)">
+      <circle cx="0" cy="-46" r="16" fill="#8a5a3b"/><path d="M-15 -30h30l8 60h-46z" fill="#ffffff"/><path d="M-13 30h26l4 44h-34z" fill="#22345c"/>
+    </g>
+    <g transform="translate(618 652)">
+      <circle cx="0" cy="-46" r="16" fill="#7a4a30"/><path d="M-16 -30h32l9 62h-50z" fill="#f7f3ea"/><path d="M-14 32h28l5 44h-38z" fill="#22345c"/>
+    </g>
+    <g transform="translate(1010 646)">
+      <circle cx="0" cy="-46" r="16" fill="#93643f"/><path d="M-16 -30h32l9 62h-50z" fill="#ffffff"/><path d="M-16 32h32l6 46h-44z" fill="#1f5b4b"/>
+    </g>
+    <g transform="translate(1066 658)">
+      <circle cx="0" cy="-44" r="15" fill="#83502f"/><path d="M-15 -28h30l8 58h-46z" fill="#f7f3ea"/><path d="M-14 30h28l5 42h-38z" fill="#22345c"/>
+    </g>
+  </g>
+
+  <!-- সামনের গাছ -->
+  <g>
+    <rect x="150" y="480" width="16" height="140" fill="#6b5136"/>
+    <circle cx="158" cy="452" r="72" fill="#37764e"/><circle cx="112" cy="486" r="48" fill="#2f6845"/><circle cx="206" cy="484" r="52" fill="#3f8055"/>
+    <rect x="1436" y="470" width="18" height="152" fill="#6b5136"/>
+    <circle cx="1445" cy="440" r="80" fill="#37764e"/><circle cx="1392" cy="478" r="52" fill="#2f6845"/><circle cx="1500" cy="476" r="56" fill="#3f8055"/>
+  </g>
+</svg>

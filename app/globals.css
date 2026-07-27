@@ -1,0 +1,538 @@
+@import "tailwindcss";
+
+/* ============================================================
+   আমাদেরস্কুল — ডিজাইন সিস্টেম
+   ------------------------------------------------------------
+   রঙ কখনো এখানে হার্ডকোড হয় না। প্রতিটি টেন্যান্ট সাইট wrapper-এ
+   lib/color.ts থেকে brand / accent / n — এই তিন পরিবারের CSS ভেরিয়েবল বসিয়ে দেয়,
+   তাই একই CSS প্রতিটি স্কুলে আলাদা "কাস্টম" চেহারা নেয়।
+   এখানে থাকে কেবল স্কেল, ছন্দ ও সিগনেচার টেক্সচার।
+   ============================================================ */
+
+@theme {
+  /* ফন্ট */
+  --font-bn: var(--font-sans-bn);
+  --font-display: var(--font-serif-bn);
+  --font-latin: var(--font-inter);
+  --font-arabic: var(--font-amiri);
+
+  /* ৮px গ্রিড — সব spacing এর গুণিতক */
+  --spacing: 0.5rem;
+
+  /* রেডিয়াস স্কেল */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-2xl: 36px;
+
+  /* ছায়া — নরম, বহুস্তর (একক গাঢ় ছায়া সস্তা দেখায়) */
+  --shadow-e1: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
+  --shadow-e2: 0 2px 4px rgba(16, 24, 40, 0.04), 0 4px 12px rgba(16, 24, 40, 0.07);
+  --shadow-e3: 0 4px 8px rgba(16, 24, 40, 0.04), 0 12px 28px rgba(16, 24, 40, 0.09);
+  --shadow-e4: 0 8px 16px rgba(16, 24, 40, 0.05), 0 24px 56px rgba(16, 24, 40, 0.12);
+
+  /* ইজিং — সব অ্যানিমেশনে অভিন্ন */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.3, 0.64, 1);
+
+  /* ── ব্যাকঅফিসের প্যালেট: "দপ্তর" ─────────────────────────────
+     পাবলিক সাইট প্রতিটি প্রতিষ্ঠানের নিজের রঙে চলে; ব্যাকঅফিস সব জায়গায়
+     অভিন্ন — সাপোর্টে স্ক্রিনশট দেখে বিভ্রান্তি হয় না।
+
+     সুর: যত্নে রাখা সরকারি রেজিস্টার খাতা — উষ্ণ কাগজ, গাঢ় সবুজ-কালো
+     মলাট, পিতলের বিভাজক ট্যাব, মার্জিনে লাল কলম। স্টার্টআপ ড্যাশবোর্ডের
+     নীল-বেগুনি নয়; কারণ ব্যবহারকারী প্রধান শিক্ষক, স্কুলের অফিসঘরে বসে। */
+  --color-ink: #1b2a24;        /* শিরোনাম ও মূল লেখা — সবুজ ঘেঁষা কালি */
+  --color-ink-soft: #5c6b63;   /* সহায়ক লেখা */
+  --color-paper: #ffffff;      /* কার্ডের পাতা */
+  --color-canvas: #f6f3ec;     /* টেবিলের উপর রাখা কাগজের রং */
+  --color-rule: #e5dfd2;       /* উষ্ণ হেয়ারলাইন — ধূসর নয় */
+  --color-brass: #a9761e;      /* পিতল — কাজের বোতাম ও বিভাজক ট্যাব */
+  --color-brass-soft: #f5ecd9;
+  --color-sky: #1f6b54;        /* লিংক ও ফোকাস — গভীর সবুজ */
+  --color-deep: #123227;       /* মলাট / স্পাইন */
+  --color-margin: #a8342b;     /* মার্জিনের লাল কলম — শুধু বিপজ্জনক কাজে */
+}
+
+/* ব্র্যান্ড ভেরিয়েবলের নিরাপদ ফলব্যাক — টেন্যান্ট wrapper না থাকলেও পেজ ভাঙে না */
+:root {
+  --brand: #1d4ed8; --brand-on: #ffffff;
+  --accent: #f59e0b; --accent-on: #1a1205;
+  --brand-50: #eef4ff; --brand-100: #dbe6ff; --brand-200: #bcd0fb; --brand-300: #93b0f7;
+  --brand-400: #6a8ff2; --brand-500: #3f6ae9; --brand-600: #1d4ed8; --brand-700: #1841b4;
+  --brand-800: #133490; --brand-900: #0e276c; --brand-950: #0a1c4d;
+  --accent-50: #fef6e7; --accent-100: #fdecc8; --accent-200: #fbd894; --accent-300: #f9c45f;
+  --accent-400: #f7ae2f; --accent-500: #f59e0b; --accent-600: #d98709; --accent-700: #a96a07;
+  --accent-800: #7a4c05; --accent-900: #4d3003; --accent-950: #2b1b02;
+  --n-0: #ffffff; --n-50: #f8fafc; --n-100: #f1f5f9; --n-200: #e2e8f0; --n-300: #cbd5e1;
+  --n-400: #94a3b8; --n-500: #64748b; --n-600: #475569; --n-700: #334155;
+  --n-800: #1e293b; --n-900: #0f172a;
+  --hero-from: #0e276c; --hero-to: #1841b4;
+}
+
+/* Tailwind ইউটিলিটিতে ব্র্যান্ড রঙ ব্যবহারযোগ্য করা (bg-brand, text-n-500 …) */
+@theme inline {
+  --color-brand: var(--brand);
+  --color-brand-on: var(--brand-on);
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
+  --color-brand-950: var(--brand-950);
+  --color-accent: var(--accent);
+  --color-accent-on: var(--accent-on);
+  --color-accent-50: var(--accent-50);
+  --color-accent-100: var(--accent-100);
+  --color-accent-200: var(--accent-200);
+  --color-accent-300: var(--accent-300);
+  --color-accent-400: var(--accent-400);
+  --color-accent-500: var(--accent-500);
+  --color-accent-600: var(--accent-600);
+  --color-accent-700: var(--accent-700);
+  --color-accent-800: var(--accent-800);
+  --color-accent-900: var(--accent-900);
+  --color-n-0: var(--n-0);
+  --color-n-50: var(--n-50);
+  --color-n-100: var(--n-100);
+  --color-n-200: var(--n-200);
+  --color-n-300: var(--n-300);
+  --color-n-400: var(--n-400);
+  --color-n-500: var(--n-500);
+  --color-n-600: var(--n-600);
+  --color-n-700: var(--n-700);
+  --color-n-800: var(--n-800);
+  --color-n-900: var(--n-900);
+}
+
+/* ── বেস ─────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  /* sticky হেডারের নিচে অ্যাঙ্কর যেন না লুকায় */
+  scroll-padding-top: 96px;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  font-family: var(--font-bn), system-ui, sans-serif;
+  color: var(--n-800);
+  background: var(--n-0);
+  /* বাংলা যুক্তাক্ষর ছোট সাইজে ভেঙে যায় — সামান্য বড় বেস ও বেশি line-height */
+  font-size: 16.5px;
+  line-height: 1.75;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, h4 { line-height: 1.25; letter-spacing: -0.01em; text-wrap: balance; }
+p { text-wrap: pretty; }
+img, video { max-width: 100%; height: auto; }
+:focus-visible { outline: 3px solid var(--brand-400); outline-offset: 2px; border-radius: 4px; }
+::selection { background: var(--brand-200); color: var(--brand-900); }
+
+.font-display { font-family: var(--font-display), Georgia, serif; }
+.font-round { font-family: var(--font-display), var(--font-bn), serif; }
+.font-latin { font-family: var(--font-latin), system-ui, sans-serif; }
+.font-arabic { font-family: var(--font-arabic), serif; }
+
+/* সংখ্যা ইংরেজি হলে ট্যাবুলার — কাউন্টার লাফায় না */
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* ── লেআউট হেল্পার ───────────────────────────────────────── */
+.container-x { width: 100%; margin-inline: auto; padding-inline: 1.25rem; max-width: 1200px; }
+@media (min-width: 768px) { .container-x { padding-inline: 2rem; } }
+.container-wide { max-width: 1360px; }
+.container-prose { max-width: 760px; }
+
+/* সেকশনের উল্লম্ব ছন্দ — প্রিমিয়াম সাইটের সবচেয়ে বড় রহস্য: প্রচুর শ্বাস */
+.section { padding-block: clamp(3.5rem, 7vw, 7rem); }
+.section-sm { padding-block: clamp(2.5rem, 5vw, 4.5rem); }
+
+/* ── টাইপোগ্রাফি স্কেল (fluid) ──────────────────────────── */
+.t-display { font-size: clamp(2.25rem, 1.4rem + 3.6vw, 4.25rem); line-height: 1.12; font-weight: 800; }
+.t-h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 3rem); line-height: 1.18; font-weight: 800; }
+.t-h2 { font-size: clamp(1.55rem, 1.2rem + 1.5vw, 2.25rem); line-height: 1.25; font-weight: 700; }
+.t-h3 { font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem); line-height: 1.35; font-weight: 700; }
+.t-lead { font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem); line-height: 1.75; }
+.t-small { font-size: 0.875rem; line-height: 1.6; }
+.t-eyebrow {
+  font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── ইফেক্ট ──────────────────────────────────────────────── */
+.glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+}
+.glass-dark {
+  background: rgba(10, 15, 26, 0.55);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+}
+/* backdrop-filter না থাকলে (পুরোনো Android WebView) স্বচ্ছতা কমিয়ে পাঠযোগ্যতা রক্ষা */
+@supports not (backdrop-filter: blur(2px)) {
+  .glass { background: rgba(255, 255, 255, 0.96); }
+  .glass-dark { background: rgba(10, 15, 26, 0.9); }
+}
+
+.hairline { box-shadow: inset 0 0 0 1px rgba(16, 24, 40, 0.08); }
+.hairline-light { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16); }
+
+.text-gradient {
+  background: linear-gradient(100deg, var(--brand-700), var(--brand-500) 55%, var(--accent-500));
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+}
+
+/* কার্ড হোভার — লিফট + রিং, ট্রান্সফর্মে সীমাবদ্ধ (রিপেইন্ট নেই) */
+.lift {
+  transition: transform 0.35s var(--ease-out-quint), box-shadow 0.35s var(--ease-out-quint);
+  will-change: transform;
+}
+@media (hover: hover) {
+  .lift:hover { transform: translateY(-4px); box-shadow: var(--shadow-e3); }
+}
+
+/* ছবির উপর টেক্সট বসানোর নিরাপদ স্ক্রিম */
+.scrim {
+  background: linear-gradient(to top,
+    rgba(4, 8, 18, 0.88) 0%, rgba(4, 8, 18, 0.55) 35%,
+    rgba(4, 8, 18, 0.12) 70%, rgba(4, 8, 18, 0) 100%);
+}
+
+/* ── স্ক্রল রিভিল — সম্পূর্ণ CSS, কোনো JavaScript নয় ───────────────
+   নিয়ম: কনটেন্ট ডিফল্টে দৃশ্যমান। অ্যানিমেশন শুধু বাড়তি সৌন্দর্য,
+   কখনোই দেখার পূর্বশর্ত নয়।
+
+   আগে এটি JS-নির্ভর ছিল — [data-reveal] শুরু হতো opacity:0 থেকে, আর
+   IntersectionObserver ক্লাস বসালে তবেই দেখা যেত। কিন্তু observer-টি
+   layout-এ একবারই চালু হতো, আর App Router-এ রুট বদলালে layout রিমাউন্ট
+   হয় না — ফলে পরের পাতাগুলোর উপাদান কখনো observe-ই হতো না এবং
+   opacity:0-তে আটকে থাকত। শিরোনাম-ফুটার দেখা যেত, মাঝের কনটেন্ট ফাঁকা;
+   রিফ্রেশ দিলে ঠিক হতো। এখন সেই ঝুঁকি সম্পূর্ণ অসম্ভব: JS বন্ধ থাকুক,
+   হাইড্রেশন ব্যর্থ হোক, বা রুট বদলাক — লেখা সবসময় পড়া যাবে। */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-reveal] {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      /* উপাদানটি নিচ থেকে ঢোকার সময় ফুটে ওঠে, উপরে গেলে আর মিলিয়ে যায় না */
+      animation-range: entry 0% cover 22%;
+    }
+  }
+}
+
+@keyframes reveal-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes float-y { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+  70% { box-shadow: 0 0 0 14px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+@keyframes marquee-x { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+
+.anim-float { animation: float-y 6s ease-in-out infinite; }
+.anim-ring { animation: pulse-ring 2.4s cubic-bezier(0.66, 0, 0, 1) infinite; }
+
+/* নোটিশ টিকার */
+.marquee { overflow: hidden; }
+.marquee > * { display: inline-flex; white-space: nowrap; animation: marquee-x var(--marquee-dur, 32s) linear infinite; }
+.marquee:hover > * { animation-play-state: paused; }
+
+/* অনুভূমিক স্ন্যাপ ক্যারোসেল — JS ছাড়াই মসৃণ */
+.snap-row {
+  display: flex; gap: 1rem; overflow-x: auto;
+  scroll-snap-type: x mandatory; scroll-behavior: smooth;
+  scrollbar-width: none; -ms-overflow-style: none;
+  padding-block: 0.5rem;
+}
+.snap-row::-webkit-scrollbar { display: none; }
+.snap-row > * { scroll-snap-align: start; flex: 0 0 auto; }
+
+/* ============================================================
+   সিগনেচার টেক্সচার — প্রতিটি টেমপ্লেটের নিজস্ব "আঙুলের ছাপ"
+   ============================================================ */
+
+/* MODERN — সূক্ষ্ম গ্রিড ও অরা (Stripe-ধাঁচ) */
+.tex-grid {
+  background-image:
+    linear-gradient(to right, rgba(16, 24, 40, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 24, 40, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+.tex-grid-fade {
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+.aura {
+  position: absolute; border-radius: 999px; filter: blur(72px); opacity: 0.5;
+  pointer-events: none;
+}
+
+/* TRADITIONAL — খাতার রুল + লাল মার্জিন (বাংলা স্কুলের চিরচেনা খাতা) */
+.khata {
+  background-image: repeating-linear-gradient(to bottom, transparent 0 31px, var(--n-200) 31px 32px);
+  background-position-y: 6px;
+}
+.khata-margin { position: relative; }
+.khata-margin::before {
+  content: ""; position: absolute; inset-block: 0; left: 1.5rem;
+  width: 2px; background: var(--accent-500); opacity: 0.55;
+}
+/* সরকারি নথির ভাঁজ-রেখা — বিশ্বাসযোগ্যতার ইঙ্গিত */
+.ribbon-fold {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+}
+
+/* ISLAMIC — অষ্টভুজ গিরিহ জালি (CSS-only, কোনো ছবি নয়) */
+.tex-girih {
+  background-image:
+    repeating-conic-gradient(from 22.5deg at 50% 50%,
+      color-mix(in srgb, var(--accent-500) 14%, transparent) 0deg 45deg,
+      transparent 45deg 90deg);
+  background-size: 42px 42px;
+}
+/* color-mix না থাকলে সাদামাটা কিন্তু সুন্দর ফলব্যাক */
+@supports not (background: color-mix(in srgb, red 10%, blue)) {
+  .tex-girih {
+    background-image: repeating-conic-gradient(from 22.5deg at 50% 50%,
+      rgba(201, 162, 39, 0.14) 0deg 45deg, transparent 45deg 90deg);
+  }
+}
+.arch { border-radius: 999px 999px var(--radius-sm) var(--radius-sm); }
+.arch-notch {
+  /* মিহরাব খিলান — উপরে সূচালো, নিচে সোজা */
+  clip-path: polygon(50% 0%, 82% 9%, 100% 32%, 100% 100%, 0 100%, 0 32%, 18% 9%);
+}
+.rule-gold {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-500), transparent);
+}
+.rule-gold-thick {
+  height: 3px; border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--accent-400), var(--accent-600), var(--accent-400), transparent);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ব্যাকঅফিস — "দপ্তর" ভাষা
+   একটিমাত্র ধারণা পুরো প্যানেলজুড়ে: রেজিস্টার খাতা। উষ্ণ কাগজ,
+   টানা রুল, পিতলের বিভাজক ট্যাব, আর মলাটের মতো গাঢ় সবুজ স্পাইন।
+   ═══════════════════════════════════════════════════════════ */
+
+/* কাজের জায়গার কাগজ — নিরেট রঙ নয়, অতি-সূক্ষ্ম রুল টানা */
+.canvas-paper {
+  background-color: var(--color-canvas);
+  background-image:
+    linear-gradient(rgba(27, 42, 36, 0.028) 1px, transparent 1px);
+  background-size: 100% 32px;
+}
+
+/* মলাট / স্পাইন — সাইডবার ও হেডার। ডানে পিতলের সরু রেখা, উপরে ম্লান জাল */
+.spine {
+  background-color: var(--color-deep);
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 140px),
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 34px);
+}
+.spine-edge { box-shadow: inset -1px 0 0 rgba(169, 118, 30, 0.55); }
+.spine-under { box-shadow: inset 0 -1px 0 rgba(169, 118, 30, 0.5); }
+
+/* কার্ডের মাথায় পিতলের বিভাজক ট্যাব — রেজিস্টারের পাতা-ভাগের চিহ্ন */
+.tab-brass::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 18px; bottom: 18px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, var(--color-brass), #7d560f);
+}
+
+/* মেনুর সক্রিয় চিহ্ন — বাঁ প্রান্তে পিতলের দাগ, হোভারে বেড়ে যায় */
+.nav-item { position: relative; }
+.nav-item::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 50%;
+  height: 0; width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--color-brass);
+  transform: translateY(-50%);
+  transition: height 0.24s var(--ease-out-quint);
+}
+.nav-item:hover::before { height: 40%; }
+.nav-item[data-active="true"]::before { height: 62%; }
+
+/* পাতা খোলার ছন্দ — একবারের সাজানো প্রবেশ, ছড়ানো মাইক্রো-নড়াচড়া নয় */
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+.stagger > * {
+  animation: riseIn 0.5s var(--ease-out-quint) both;
+  animation-delay: calc(var(--i, 0) * 55ms);
+}
+/* সূচক CSS-এই — প্রতিটি পেজে হাতে --i বসাতে হয় না */
+.stagger > *:nth-child(1) { --i: 0; }
+.stagger > *:nth-child(2) { --i: 1; }
+.stagger > *:nth-child(3) { --i: 2; }
+.stagger > *:nth-child(4) { --i: 3; }
+.stagger > *:nth-child(5) { --i: 4; }
+.stagger > *:nth-child(6) { --i: 5; }
+.stagger > *:nth-child(7) { --i: 6; }
+.stagger > *:nth-child(n + 8) { --i: 7; }
+@media (prefers-reduced-motion: reduce) {
+  .stagger > * { animation: none; }
+  .nav-item::before { transition: none; }
+}
+
+/* নেভিগেশন পট্টি — ক্লিকের সাথে সাথেই "কিছু হচ্ছে" বোঝায়।
+   কতক্ষণ লাগবে জানা নেই, তাই অগ্রগতি ইচ্ছাকৃতভাবে ধীর হতে হতে ৯০%-এ
+   থেমে থাকে; পাতা এলে কম্পোনেন্টটি সরে যায়। */
+@keyframes navProgress {
+  0%   { transform: scaleX(0.08); }
+  40%  { transform: scaleX(0.55); }
+  70%  { transform: scaleX(0.78); }
+  100% { transform: scaleX(0.9); }
+}
+.nav-progress-bar {
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--color-brass, #a9761e), var(--brand, #1d4ed8));
+  /* base transform আলাদা করে দেওয়া: অ্যানিমেশন কোনো কারণে না চললেও
+     (পুরোনো ব্রাউজার, কম-মোশন সেটিং) পট্টিটি দেখা যাবে — শূন্য প্রস্থে
+     অদৃশ্য হয়ে থাকবে না, যা পুরো উদ্দেশ্যটাই ব্যর্থ করত */
+  transform: scaleX(0.08);
+  animation: navProgress 6s var(--ease-out-quint) forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-progress-bar { animation: none; transform: scaleX(0.6); }
+}
+
+/* ── লোডিং কঙ্কাল ───────────────────────────────────────────
+   কেন দরকার: পেজ বদলাতে সার্ভারে ১–৯ সেকেন্ড লাগতে পারে (ধীর সংযোগ,
+   দূরের ডেটাবেস)। এই সময়টায় App Router কিছুই না দেখালে ব্যবহারকারী ভাবেন
+   ক্লিকটাই কাজ করেনি — তাই রিফ্রেশ চাপেন, আর সব কাজ আবার শুরু হয়।
+   কঙ্কাল দেখানো মানে "এসে গেছে, একটু দাঁড়ান" — রিফ্রেশের চক্র ভাঙে।
+   পুরোটাই CSS, এক বাইটও জাভাস্ক্রিপ্ট নয়। */
+@keyframes shimmer { 100% { background-position: -200% 0; } }
+.sk {
+  background: linear-gradient(90deg, var(--n-100) 8%, var(--n-200) 18%, var(--n-100) 28%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+  border-radius: 10px;
+}
+.sk-dark {
+  background: linear-gradient(90deg, rgba(255,255,255,.06) 8%, rgba(255,255,255,.13) 18%, rgba(255,255,255,.06) 28%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+  border-radius: 10px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sk, .sk-dark { animation: none; }
+}
+
+/* প্রধান মেনু — সবসময় এক লাইনে
+   বারোটি বাংলা মেনু আইটেম ১০২৪px পর্দায় সবসময় আঁটে না। আগে সেগুলো ভেঙে
+   দুই লাইনে চলে যেত এবং পুরো পেজে অনুভূমিক স্ক্রলবার এনে দিত — দুটোই দৃষ্টিকটু।
+   সমাধান: লেখা কখনো ভাঙে না (nowrap), আর না আঁটলে মেনুটুকুই পাশে স্ক্রল করে,
+   পেজ নয়। স্ক্রলবার লুকানো, কারণ ডেস্কটপে সেটি নোংরা দেখায়। */
+.nav-row {
+  display: flex;
+  flex-wrap: nowrap;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.nav-row::-webkit-scrollbar { display: none; }
+.nav-row > * { flex: 0 0 auto; white-space: nowrap; }
+/* শেষ আইটেমের ডানে একটু শ্বাস — প্রান্ত ঘেঁষে থাকলে "কাটা পড়েছে" মনে হয় */
+.nav-row::after { content: ""; flex: 0 0 8px; }
+
+/* OFFICIAL — চার্ট
+   দণ্ডে হোভার করলে বাকিগুলো ম্লান হয়, ফলে চোখ এক বছরের উপর স্থির হয়।
+   পুরো ইন্টার‌্যাকশনটাই CSS — চার্টে এক লাইনও জাভাস্ক্রিপ্ট যায় না। */
+.chart-bar { transition: opacity 0.2s ease; }
+svg:hover > .chart-bar { opacity: 0.45; }
+svg > .chart-bar:hover { opacity: 1; }
+svg > .chart-bar:hover path { filter: brightness(1.08); }
+
+/* সরকারি ধাঁচের শিরোনাম-পট্টি — বাংলাদেশের নথির চেনা ছন্দ */
+.band-govt {
+  background-image: repeating-linear-gradient(
+    45deg, rgba(255, 255, 255, 0.06) 0 8px, transparent 8px 16px);
+}
+
+/* লম্বা টেবিলে প্রথম কলাম আটকে রাখলে অনুভূমিক স্ক্রলেও দিক হারায় না */
+.sticky-col { position: sticky; left: 0; z-index: 2; }
+
+/* ── অ্যাক্সেসিবিলিটি ───────────────────────────────────── */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; left: 1rem; top: -100px; z-index: 100;
+  background: var(--brand); color: var(--brand-on);
+  padding: 0.75rem 1.25rem; border-radius: var(--radius-sm); font-weight: 700;
+  transition: top 0.2s;
+}
+.skip-link:focus { top: 1rem; }
+
+/* ══ পরিচিতি পাতা — "গেজেট" ধাঁচ ═══════════════════════════
+   ভাবনা: বাংলাদেশের শিক্ষা প্রতিষ্ঠানের কাছে বিশ্বাসযোগ্যতার চেহারা মানে
+   সরকারি নথি — ক্রিম কাগজ, পিতলের রেখা, গাঢ় সবুজ সিলমোহর। সেই চেনা
+   ভাষাকেই আধুনিক প্রকাশনার যত্নে সাজানো হয়েছে। ছবি নেই, সবটুকুই CSS —
+   ধীর সংযোগে পাতা সঙ্গে সঙ্গেই দাঁড়িয়ে যায়। */
+
+/* পাতার সূক্ষ্ম দানা — কাগজ মনে করানোর জন্য, ছবি ছাড়াই */
+.paper-grain {
+  background-image: radial-gradient(rgba(18, 50, 39, 0.045) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+/* সূচিপত্রের ফুটকি-রেখা — বাংলা পাঠ্যবইয়ের সূচির চেনা ছন্দ */
+.toc-row { display: flex; align-items: baseline; gap: 0.55rem; }
+.toc-dots {
+  flex: 1 1 auto; min-width: 1.25rem;
+  border-bottom: 1px dotted var(--color-rule);
+  transform: translateY(-0.3em);
+}
+
+/* নথির দ্বৈত রেখা — মাস্টহেডের নিচে */
+.rule-double { border-top: 3px double var(--color-brass); }
+
+/* পাতা খোলার সময় একবারই মৃদু উত্থান। স্ক্রল-নির্ভর নয় বলে কোনো
+   পর্যবেক্ষকের উপর ভরসা করতে হয় না — লেখা কখনো লুকিয়ে থাকে না। */
+@keyframes rise-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  .rise { animation: rise-in 0.65s var(--ease-out-quint) both; animation-delay: var(--d, 0ms); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important; scroll-behavior: auto !important;
+  }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+}
+
+/* ── প্রিন্ট (নোটিশ/ফলাফল ছাপানো বাংলাদেশে খুব সাধারণ) ─── */
+@media print {
+  .no-print { display: none !important; }
+  body { font-size: 12pt; color: #000; background: #fff; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #555; }
+  .section { padding-block: 1rem; }
+}

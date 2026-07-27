@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800" role="img" aria-label="শিক্ষার্থীর প্রতিকৃতি">
+  <defs><linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4eede"/><stop offset="1" stop-color="#cddcc4"/></linearGradient></defs>
+  <rect width="600" height="800" fill="url(#bg2)"/>
+  <circle cx="300" cy="330" r="200" fill="#ffffff" opacity="0.45"/>
+  <g>
+    <path d="M300 470c-118 0-206 62-224 170-4 24-6 44-6 60h460c0-16-2-36-6-60-18-108-106-170-224-170z" fill="#ffffff"/>
+    <path d="M300 470c-24 0-46 2-68 8v252h136V478c-22-6-44-8-68-8z" fill="#f7f3ea"/>
+    <path d="M258 478h84l-42 54-42-54z" fill="#22345c"/>
+    <path d="M300 528v172" stroke="#dcd6c8" stroke-width="5"/>
+    <g fill="#22345c"><circle cx="300" cy="566" r="7"/><circle cx="300" cy="622" r="7"/><circle cx="300" cy="678" r="7"/></g>
+    <!-- টাই -->
+    <path d="M286 528h28l-8 34 14 84-20 22-20-22 14-84-8-34z" fill="#8f2340"/>
+    <rect x="252" y="392" width="96" height="106" rx="34" fill="#7d4f33"/>
+    <circle cx="300" cy="322" r="114" fill="#8a5a3b"/>
+    <path d="M300 206c-64 0-110 44-110 104 0 10 2 20 4 28 8-40 42-56 106-56s98 16 106 56c2-8 4-18 4-28 0-60-46-104-110-104z" fill="#241a15"/>
+    <g fill="#241a15"><ellipse cx="260" cy="320" rx="9" ry="11"/><ellipse cx="340" cy="320" rx="9" ry="11"/></g>
+    <path d="M266 370c14 16 54 16 68 0" stroke="#5f3a24" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M238 288c12-8 30-8 42-2M318 286c12-6 30-6 42 2" stroke="#241a15" stroke-width="8" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>

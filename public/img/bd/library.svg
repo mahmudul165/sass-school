@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="পাঠাগার — বইয়ের তাক ও পাঠরত শিক্ষার্থী">
+  <defs>
+    <linearGradient id="bwall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6ecdc"/><stop offset="1" stop-color="#e6d6bd"/>
+    </linearGradient>
+    <linearGradient id="lamp" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe6b0" stop-opacity="0.9"/><stop offset="1" stop-color="#ffe6b0" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bwall)"/>
+  <rect y="690" width="1600" height="210" fill="#a9793f"/>
+  <g stroke="#96692f" stroke-width="4" opacity="0.6"><path d="M0 740h1600M0 800h1600M0 860h1600"/></g>
+
+  <!-- বইয়ের তাক -->
+  <g>
+    <rect x="80" y="120" width="560" height="570" rx="8" fill="#8a5f2c"/>
+    <rect x="96" y="136" width="528" height="538" fill="#6f4a20"/>
+    <g>
+      <rect x="96" y="270" width="528" height="16" fill="#8a5f2c"/>
+      <rect x="96" y="410" width="528" height="16" fill="#8a5f2c"/>
+      <rect x="96" y="550" width="528" height="16" fill="#8a5f2c"/>
+    </g>
+    <g>
+      <!-- সারি ১ -->
+      <g>
+        <rect x="116" y="166" width="26" height="104" fill="#c94f4f"/><rect x="146" y="176" width="22" height="94" fill="#e0a03c"/>
+        <rect x="172" y="160" width="30" height="110" fill="#3f7a8f"/><rect x="206" y="180" width="20" height="90" fill="#4f9a6b"/>
+        <rect x="230" y="168" width="28" height="102" fill="#8a4f8f"/><rect x="262" y="186" width="22" height="84" fill="#d0682f"/>
+        <rect x="288" y="162" width="26" height="108" fill="#2f6b8f"/><rect x="318" y="178" width="24" height="92" fill="#c94f4f"/>
+        <rect x="346" y="170" width="20" height="100" fill="#4f9a6b"/><rect x="370" y="182" width="28" height="88" fill="#e0a03c"/>
+        <rect x="402" y="164" width="24" height="106" fill="#8a4f8f"/><rect x="430" y="176" width="26" height="94" fill="#3f7a8f"/>
+        <rect x="460" y="168" width="22" height="102" fill="#d0682f"/><rect x="486" y="180" width="28" height="90" fill="#2f6b8f"/>
+        <rect x="518" y="160" width="24" height="110" fill="#c94f4f"/><rect x="546" y="174" width="26" height="96" fill="#4f9a6b"/>
+        <rect x="576" y="182" width="22" height="88" fill="#e0a03c"/>
+      </g>
+      <!-- সারি ২ -->
+      <g transform="translate(0 140)">
+        <rect x="116" y="176" width="24" height="94" fill="#3f7a8f"/><rect x="144" y="166" width="28" height="104" fill="#d0682f"/>
+        <rect x="176" y="184" width="20" height="86" fill="#8a4f8f"/><rect x="200" y="170" width="26" height="100" fill="#4f9a6b"/>
+        <rect x="230" y="162" width="24" height="108" fill="#c94f4f"/><rect x="258" y="180" width="28" height="90" fill="#2f6b8f"/>
+        <rect x="290" y="172" width="22" height="98" fill="#e0a03c"/><rect x="316" y="164" width="26" height="106" fill="#4f9a6b"/>
+        <rect x="346" y="186" width="24" height="84" fill="#8a4f8f"/><rect x="374" y="168" width="28" height="102" fill="#3f7a8f"/>
+        <rect x="406" y="178" width="20" height="92" fill="#d0682f"/><rect x="430" y="160" width="26" height="110" fill="#c94f4f"/>
+        <rect x="460" y="182" width="24" height="88" fill="#2f6b8f"/><rect x="488" y="170" width="28" height="100" fill="#e0a03c"/>
+        <rect x="520" y="176" width="22" height="94" fill="#4f9a6b"/><rect x="546" y="164" width="26" height="106" fill="#8a4f8f"/>
+      </g>
+      <!-- সারি ৩ -->
+      <g transform="translate(0 280)">
+        <rect x="116" y="170" width="28" height="100" fill="#e0a03c"/><rect x="148" y="182" width="22" height="88" fill="#2f6b8f"/>
+        <rect x="174" y="164" width="26" height="106" fill="#4f9a6b"/><rect x="204" y="176" width="24" height="94" fill="#c94f4f"/>
+        <rect x="232" y="168" width="28" height="102" fill="#8a4f8f"/><rect x="264" y="186" width="20" height="84" fill="#3f7a8f"/>
+        <rect x="288" y="172" width="26" height="98" fill="#d0682f"/><rect x="318" y="160" width="24" height="110" fill="#4f9a6b"/>
+        <rect x="346" y="180" width="28" height="90" fill="#e0a03c"/><rect x="378" y="166" width="22" height="104" fill="#c94f4f"/>
+        <rect x="404" y="178" width="26" height="92" fill="#2f6b8f"/><rect x="434" y="170" width="24" height="100" fill="#8a4f8f"/>
+        <rect x="462" y="184" width="28" height="86" fill="#3f7a8f"/><rect x="494" y="162" width="22" height="108" fill="#d0682f"/>
+        <rect x="520" y="176" width="26" height="94" fill="#4f9a6b"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- জানালা ও আলো -->
+  <g>
+    <rect x="1190" y="140" width="300" height="300" rx="10" fill="#a8cfdd"/>
+    <rect x="1190" y="140" width="300" height="300" rx="10" fill="none" stroke="#8d7c62" stroke-width="14"/>
+    <path d="M1340 146v288M1196 290h288" stroke="#8d7c62" stroke-width="10"/>
+    <path d="M1190 440l-260 250h560l-40-250z" fill="url(#lamp)" opacity="0.55"/>
+  </g>
+
+  <!-- টেবিল ও পাঠরত শিক্ষার্থী -->
+  <g transform="translate(1060 690)">
+    <rect x="-260" y="-30" width="520" height="30" rx="8" fill="#8a5f2c"/>
+    <rect x="-230" y="0" width="22" height="120" fill="#6f4a20"/><rect x="208" y="0" width="22" height="120" fill="#6f4a20"/>
+    <!-- খোলা বই -->
+    <g transform="translate(-40 -34)">
+      <path d="M-70 0c26-16 52-16 70 0 18-16 44-16 70 0l-8 12c-24-12-46-12-62 2-16-14-38-14-62-2z" fill="#fbf7ee" stroke="#c9b294" stroke-width="3"/>
+    </g>
+    <!-- শিক্ষার্থী ১ -->
+    <g transform="translate(-140 -40)">
+      <circle cx="0" cy="-70" r="28" fill="#8a5a3b"/>
+      <path d="M-34 -44h68l14 44h-96z" fill="#ffffff"/>
+    </g>
+    <!-- শিক্ষার্থী ২ -->
+    <g transform="translate(110 -40)">
+      <circle cx="0" cy="-70" r="28" fill="#7a4a30"/>
+      <path d="M-30 -96a30 30 0 0 1 60 0c8 22-4 34-30 34s-38-12-30-34z" fill="#2b1f1a" opacity="0.85"/>
+      <path d="M-34 -44h68l14 44h-96z" fill="#f0d9dd"/>
+    </g>
+    <!-- টেবিল ল্যাম্প -->
+    <g transform="translate(200 -34)">
+      <rect x="-4" y="-70" width="8" height="70" fill="#48595c"/>
+      <path d="M-30 -70h60l-16-28h-28z" fill="#c9a227"/>
+      <ellipse cx="0" cy="0" rx="26" ry="7" fill="#48595c"/>
+    </g>
+  </g>
+</svg>
