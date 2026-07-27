@@ -3,7 +3,7 @@ import { loadTenant, type Params } from "@/lib/page";
 import { RoutineTables } from "@/components/site/blocks";
 import { Section, Btn } from "@/components/site/ui";
 import { Icon } from "@/components/site/icons";
-import Link from "next/link";
+import { TLink } from "@/components/site/tlink";
 import { fmtDate } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
@@ -34,14 +34,14 @@ export default async function RoutinePage({ params }: Params) {
           </h2>
           <div className="rounded-2xl bg-white hairline overflow-hidden max-w-3xl">
             {related.map((nt, i) => (
-              <Link key={nt._id} href={`/notice/${nt._id}`}
+              <TLink key={nt._id} href={`/notice/${nt._id}`}
                 className={`flex items-start gap-3 p-5 hover:bg-brand-50/60 transition ${i ? "border-t border-n-100" : ""}`}>
                 <Icon name="file" size={18} className="mt-1 shrink-0 text-brand" />
                 <span>
                   <span className="block font-semibold text-n-900 leading-snug">{nt.title}</span>
                   <span className="block text-[13px] text-n-400 mt-0.5">{fmtDate(nt.createdAt, lang)}</span>
                 </span>
-              </Link>
+              </TLink>
             ))}
           </div>
           <div className="mt-6">

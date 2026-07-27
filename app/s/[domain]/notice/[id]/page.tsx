@@ -6,7 +6,7 @@ import { dict, fmtDate } from "@/lib/i18n";
 import { Section, Btn, Pill } from "@/components/site/ui";
 import { Icon } from "@/components/site/icons";
 import { notFound } from "next/navigation";
-import Link from "next/link";
+import { TLink } from "@/components/site/tlink";
 import type { Metadata } from "next";
 import type { Notice } from "@/templates/types";
 
@@ -50,9 +50,9 @@ export default async function NoticeDetail({ params }: P) {
           )}
 
           <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-n-200 pt-6 no-print">
-            <Link href="/notice" className="inline-flex items-center gap-2 text-brand font-bold hover:gap-3 transition-all">
+            <TLink href="/notice" className="inline-flex items-center gap-2 text-brand font-bold hover:gap-3 transition-all">
               <Icon name="chevronLeft" size={17} /> {tr.allNotices}
-            </Link>
+            </TLink>
             <span className="text-[14px] text-n-400">{fmtDate(notice.createdAt, lang)}</span>
           </div>
         </article>

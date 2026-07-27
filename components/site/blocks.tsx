@@ -6,7 +6,7 @@
    থেকেই আসে, ফলে প্রতিটি টেমপ্লেটে এগুলো "নিজেরই অংশ" মনে হয়।
 
    সবগুলোই সার্ভার কম্পোনেন্ট — ব্রাউজারে কোনো জাভাস্ক্রিপ্ট যায় না। */
-import Link from "next/link";
+import { TLink } from "@/components/site/tlink";
 import { Section, SectionHead, Btn, Figure, Avatar } from "./ui";
 import { Icon } from "./icons";
 import { dict, messageOf, type Lang } from "@/lib/i18n";
@@ -230,7 +230,7 @@ export function RoutineTables({ routine, lang = "bn" }: { routine: RoutineTable[
 
       <p className="mt-8 text-[14.5px] text-n-500 flex gap-2 justify-center text-center">
         <Icon name="bell" size={17} className="mt-0.5 shrink-0 text-brand" />
-        {t.routineNote} <Link href="/notice" className="text-brand font-semibold hover:underline">{t.navNotice}</Link>
+        {t.routineNote} <TLink href="/notice" className="text-brand font-semibold hover:underline">{t.navNotice}</TLink>
       </p>
     </Section>
   );

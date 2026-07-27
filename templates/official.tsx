@@ -14,7 +14,7 @@
    এক হাজার লাইন লিখলে একটিতে বাগ ঠিক করে বাকি চারটিতে ভুলে যাওয়া নিশ্চিত —
    তাই একটিই ভিত্তি, উপরে পাঁচটি ভিন্ন কনফিগ।
    ═══════════════════════════════════════════════════════════════ */
-import Link from "next/link";
+import { TLink } from "@/components/site/tlink";
 import type { Template, HomeData, NavItem, TenantX, Notice } from "./types";
 import { buildNav, footerLinks, show } from "./types";
 import { Icon, WhatsAppIcon, FacebookIcon, YouTubeIcon, MessengerIcon } from "@/components/site/icons";
@@ -99,9 +99,17 @@ const cardCls = (v: Variant, extra = "") =>
 
 /* ═══════════════ হেডার ═══════════════ */
 function makeHeader(v: Variant): Template["Header"] {
-  return function Header({ tenant, notices = [], lang = "bn" }) {
+  return async function Header({ tenant, notices = [], lang = "bn" }) {
     const t = dict(lang);
-    const nav = buildNav(tenant, lang);
+    /* মোবাইল মেনু একটি ক্লায়েন্ট কম্পোনেন্ট, তাই সেখানে TLink চলে না
+       (TLink সার্ভারে ভিত্তি-পথ পড়ে)। তাই লিংকগুলো এখানেই তৈরি করে
+       পাঠানো হয়। পথ-ভিত্তিক না হলে base ফাঁকা, কিছুই বদলায় না। */
+    const base = await tenantBase();
+    const nav = buildNav(tenant, lang).map((n) => ({
+      ...n,
+      href: withBase(base, n.href),
+      children: n.children?.map((c) => ({ ...c, href: withBase(base, c.href) })),
+    }));
     const main = nav.filter((n) => !n.cta);
     const login = nav.find((n) => n.cta);
     const c = tenant.contact;
@@ -197,11 +205,11 @@ function makeHeader(v: Variant): Template["Header"] {
                   উপ-পেজগুলো বড় করে দেওয়া আছে, আর মোবাইল মেনুতে তো আছেই। */}
               <nav className="hidden lg:flex nav-row flex-1" aria-label={t.mainMenu}>
                 {main.map((nItem) => (
-                  <Link key={nItem.href + nItem.label} href={nItem.href} title={nItem.label}
+                  <TLink key={nItem.href + nItem.label} href={nItem.href} title={nItem.label}
                     className={`inline-flex items-center px-1.5 xl:px-3 py-3.5 text-[12.5px] xl:text-[14.5px] font-bold transition
                       ${nItem.feature ? "text-accent-200" : ""} hover:bg-black/20`}>
                     {nItem.short || nItem.label}
-                  </Link>
+                  </TLink>
                 ))}
               </nav>
 
@@ -271,17 +279,17 @@ function Hero({ v, d }: { v: Variant; d: HomeData }) {
             <div className="flex items-center gap-2.5 px-5 py-4 text-white" style={{ background: "var(--brand-700)" }}>
               <Icon name="bell" size={19} />
               <h2 className={`${v.display} font-bold text-[17px]`}>{t.secNoticeBoard}</h2>
-              <Link href="/notice" className="ml-auto text-[13px] opacity-85 hover:opacity-100 hover:underline">{t.seeAll}</Link>
+              <TLink href="/notice" className="ml-auto text-[13px] opacity-85 hover:opacity-100 hover:underline">{t.seeAll}</TLink>
             </div>
             <div className="khata khata-margin flex-1 px-3 py-2">
               <ul className="pl-9 pr-2">
                 {notices.slice(0, 7).map((nt) => (
                   <li key={nt._id} className="leading-8">
-                    <Link href={`/notice/${nt._id}`} className="block hover:text-brand transition">
+                    <TLink href={`/notice/${nt._id}`} className="block hover:text-brand transition">
                       <span className="text-[14.5px] text-n-800 line-clamp-1">
                         {nt.pinned && <span className="text-accent-600 font-bold">★ </span>}{nt.title}
                       </span>
-                    </Link>
+                    </TLink>
                   </li>
                 ))}
                 {!notices.length && <li className="leading-8 text-n-400 text-[14.5px]">{t.emptyNotice}</li>}
@@ -327,7 +335,7 @@ function Hero({ v, d }: { v: Variant; d: HomeData }) {
               ? <HeroSlides images={images} alt={tenant.name} />
               : <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, var(--hero-from), var(--hero-to))" }} />}
             {notices[0] && (
-              <Link href={`/notice/${notices[0]._id}`}
+              <TLink href={`/notice/${notices[0]._id}`}
                 className={`absolute inset-x-4 bottom-4 ${v.r} glass p-4 flex items-start gap-3 hover:shadow-e3 transition`}>
                 <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-accent text-accent-on">
                   <Icon name="bell" size={17} />
@@ -336,7 +344,7 @@ function Hero({ v, d }: { v: Variant; d: HomeData }) {
                   <span className="block text-[11.5px] font-bold text-brand uppercase tracking-wide">{t.secLatestNotice}</span>
                   <span className="block text-[14.5px] font-semibold text-n-900 line-clamp-2 leading-snug">{notices[0].title}</span>
                 </span>
-              </Link>
+              </TLink>
             )}
           </div>
         </div>
@@ -381,7 +389,7 @@ function QuickTiles({ v, lang }: { v: Variant; lang: Lang }) {
       <div className="container-x py-7">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
           {tiles.map((tile, i) => (
-            <Link key={tile.href} href={tile.href} data-reveal style={{ ["--reveal-delay" as string]: `${i * 70}ms` }}
+            <TLink key={tile.href} href={tile.href} data-reveal style={{ ["--reveal-delay" as string]: `${i * 70}ms` }}
               className={`lift group ${v.r} border border-n-200 bg-white p-4 md:p-5 flex items-center gap-3 md:gap-4`}>
               <span className={`grid h-11 w-11 md:h-12 md:w-12 shrink-0 place-items-center ${v.r} text-white transition group-hover:scale-105`}
                 style={{ background: i % 2 ? "var(--accent-600)" : "var(--brand-600)" }}>
@@ -397,7 +405,7 @@ function QuickTiles({ v, lang }: { v: Variant; lang: Lang }) {
                 <span className="block font-bold text-n-900 text-[15px] md:text-[15.5px] leading-snug">{tile.label}</span>
                 <span className="block text-[12.5px] md:text-[13px] text-n-500 leading-snug mt-0.5 line-clamp-2">{tile.sub}</span>
               </span>
-            </Link>
+            </TLink>
           ))}
         </div>
       </div>
@@ -480,9 +488,9 @@ function Leaders({ v, d }: { v: Variant; d: HomeData }) {
                 </div>
               </div>
               <blockquote className="text-n-600 leading-[1.95] line-clamp-5">“{p.message}”</blockquote>
-              <Link href={href} className="mt-5 inline-flex items-center gap-1.5 text-brand font-bold text-[14.5px] hover:gap-2.5 transition-all">
+              <TLink href={href} className="mt-5 inline-flex items-center gap-1.5 text-brand font-bold text-[14.5px] hover:gap-2.5 transition-all">
                 {t.readMore} <Icon name="arrowRight" size={15} />
-              </Link>
+              </TLink>
             </div>
           </article>
         ))}
@@ -986,7 +994,7 @@ function makeFooter(v: Variant): Template["Footer"] {
             <p className={`text-white font-bold mb-4 ${v.display}`}>{t.secQuickLinks}</p>
             <ul className="space-y-2.5 text-[14.5px]">
               {links.slice(0, 6).map((l) => (
-                <li key={l.href}><Link href={l.href} className="hover:text-white transition">{l.label}</Link></li>
+                <li key={l.href}><TLink href={l.href} className="hover:text-white transition">{l.label}</TLink></li>
               ))}
             </ul>
           </nav>
@@ -994,9 +1002,9 @@ function makeFooter(v: Variant): Template["Footer"] {
             <p className={`text-white font-bold mb-4 ${v.display}`}>{t.more}</p>
             <ul className="space-y-2.5 text-[14.5px]">
               {links.slice(6).map((l) => (
-                <li key={l.href}><Link href={l.href} className="hover:text-white transition">{l.label}</Link></li>
+                <li key={l.href}><TLink href={l.href} className="hover:text-white transition">{l.label}</TLink></li>
               ))}
-              <li><Link href="/login" className="hover:text-white transition">{t.navLogin}</Link></li>
+              <li><TLink href="/login" className="hover:text-white transition">{t.navLogin}</TLink></li>
             </ul>
           </nav>
 
@@ -1034,7 +1042,7 @@ function makePageHeader(v: Variant): Template["PageHeader"] {
         {v.girih && <span className="tex-girih absolute inset-0 opacity-30 pointer-events-none" aria-hidden="true" />}
         <div className="container-x relative py-10 md:py-14">
           <nav aria-label={t.breadcrumb} className="text-[13.5px] text-n-500 mb-2.5">
-            <Link href="/" className="hover:text-brand">{t.navHome}</Link><span className="mx-2">/</span>
+            <TLink href="/" className="hover:text-brand">{t.navHome}</TLink><span className="mx-2">/</span>
             <span className="text-n-700">{crumb || title}</span>
           </nav>
           <h1 className={`${v.display} t-h1 text-brand-900 relative inline-block pb-3`}>
@@ -1059,7 +1067,7 @@ function makeNoticeList(v: Variant): Template["NoticeList"] {
         {notices.length === 0 && <p className="text-center text-n-500 py-10">{t.emptyNotice}</p>}
         <div className={`max-w-4xl mx-auto ${v.r} border border-n-200 bg-white overflow-hidden`}>
           {notices.map((nt, i) => (
-            <Link key={nt._id} href={`/notice/${nt._id}`}
+            <TLink key={nt._id} href={`/notice/${nt._id}`}
               className={`flex gap-4 p-5 hover:bg-brand-50/60 transition ${i ? "border-t border-n-100" : ""}`}>
               <span className={`grid h-14 w-14 shrink-0 place-items-center ${v.r} border-2 text-center`}
                 style={{ borderColor: "var(--brand-600)", color: "var(--brand-700)" }}>
@@ -1076,7 +1084,7 @@ function makeNoticeList(v: Variant): Template["NoticeList"] {
                 {nt.body && <span className="mt-1 block text-[14.5px] text-n-500 line-clamp-2">{nt.body}</span>}
                 <span className="mt-1.5 block text-[12.5px] text-n-400">{fmtDate(nt.createdAt, lang)}</span>
               </span>
-            </Link>
+            </TLink>
           ))}
         </div>
       </Section>

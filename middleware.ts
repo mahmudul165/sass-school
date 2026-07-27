@@ -22,18 +22,28 @@ export default function middleware(req: NextRequest) {
   // 127.0.0.1-ও ধরা হয়: কিছু ব্রাউজার/টুল "localhost" খুলতে দেয় না, তখন
   // অ্যাডমিন প্যানেল পরীক্ষা করার আর কোনো উপায় থাকত না।
   if (host === root || host === "localhost" || host === "127.0.0.1" || host.endsWith(".vercel.app")) {
-    /* ডেমো প্রিভিউ — সাবডোমেইন ছাড়াই টেন্যান্ট সাইট দেখানোর উপায়।
-       কেন দরকার: Vercel-এর *.vercel.app ঠিকানায় ইচ্ছেমতো সাবডোমেইন
-       বানানো যায় না (DNS-ই নেই), তাই demo-govt.<project>.vercel.app
-       কখনো খুলবে না — ERR_CONNECTION_CLOSED। কাস্টম ডোমেইন যুক্ত না করা
-       পর্যন্ত এই কুকিটিই বিকল্প: /demo/<slug> একবার খুললে কুকি বসে, আর
-       তারপর মূল ডোমেইনের সব পথ ওই প্রতিষ্ঠানের সাইটে রূপান্তরিত হয়।
-       ফলে টেমপ্লেটের ভেতরের "/about", "/notice" লিংকগুলোও অবিকল কাজ করে —
-       একটি লিংকও বদলাতে হয় না। */
-    const demo = req.cookies.get("demo-tenant")?.value;
-    const RESERVED = /^\/(admin|super|api|demo|_next)(\/|$)/;
-    if (demo && !RESERVED.test(pathname)) {
-      return NextResponse.rewrite(new URL(`/s/${demo}${pathname}${search}`, req.url));
+    /* পথ-ভিত্তিক টেন্যান্ট — /demo-govt/about
+       কেন দরকার: Vercel-এর *.vercel.app ঠিকানায় ইচ্ছেমতো সাবডোমেইনের DNS
+       নেই, তাই demo-govt.<project>.vercel.app কখনো খোলে না। উন্নয়নেও
+       সাবডোমেইন সবসময় সুবিধাজনক নয়। তাই মূল ডোমেইনে পথের প্রথম অংশটিকে
+       প্রতিষ্ঠানের slug ধরা হয়:
+
+         localhost:3000/demo-govt          → /s/demo-govt
+         amarschool-weld.vercel.app/x/about → /s/x/about
+         demo-govt.amaderschool.com/about   → সাবডোমেইন, নিচের শাখা
+
+       x-tenant-base হেডারে ভিত্তি-পথ পাঠানো হয়, যাতে টেমপ্লেটের ভিতরের
+       লিংকগুলো (TLink) নিজে থেকেই "/demo-govt" যোগ করে নেয়। সাবডোমেইনে
+       হেডারটি থাকে না, ভিত্তি-পথ ফাঁকা, আচরণ আগের মতোই — তাই প্রোডাকশনের
+       পথ এতটুকুও বদলায় না। */
+    const seg = pathname.split("/")[1] || "";
+    const RESERVED = /^(admin|super|api|demo|s|_next|offline\.html)$/;
+    if (seg && !RESERVED.test(seg)) {
+      const requestHeaders = new Headers(req.headers);
+      requestHeaders.set("x-tenant-base", `/${seg}`);
+      return NextResponse.rewrite(new URL(`/s${pathname}${search}`, req.url), {
+        request: { headers: requestHeaders },
+      });
     }
     return NextResponse.next();
   }

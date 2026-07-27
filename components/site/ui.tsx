@@ -1,7 +1,7 @@
 /* সার্ভার-রেন্ডারযোগ্য প্রিমিটিভ — তিনটি টেমপ্লেটই এগুলো ব্যবহার করে,
    কিন্তু variant/className দিয়ে নিজের চেহারা দেয়। কোনো "use client" নেই,
    তাই এগুলো বান্ডলে যায় না — শুধু HTML যায়। */
-import Link from "next/link";
+import { TLink } from "@/components/site/tlink";
 import { Icon } from "./icons";
 import { bnDate } from "@/lib/utils";
 import { toBnDigits } from "@/lib/content";
@@ -88,7 +88,7 @@ export function Btn({
       </a>
     );
   }
-  return <Link href={href} className={cls} style={style} title={title}>{inner}</Link>;
+  return <TLink href={href} className={cls} style={style} title={title}>{inner}</TLink>;
 }
 
 /* ── ব্যাজ / পিল ────────────────────────────────────────── */
@@ -129,12 +129,12 @@ export function NoticeTicker({ notices, label = "সর্বশেষ নোট
       <div className="marquee flex-1 flex items-center" style={{ ["--marquee-dur" as string]: `${Math.max(24, notices.length * 9)}s` }}>
         <div>
           {items.map((n, i) => (
-            <Link key={`${n._id}-${i}`} href={`/notice/${n._id}`}
+            <TLink key={`${n._id}-${i}`} href={`/notice/${n._id}`}
               className="inline-flex items-center gap-2.5 px-6 text-[14.5px] hover:underline">
               <span className="h-1.5 w-1.5 rounded-full bg-accent shrink-0" />
               {n.title}
               <span className="opacity-60 text-[12.5px]">{bnDate(n.createdAt)}</span>
-            </Link>
+            </TLink>
           ))}
         </div>
       </div>

@@ -10,7 +10,7 @@ import { Icon } from "@/components/site/icons";
 import { ResultSearch, InquiryForm } from "@/components/site/interactive";
 import { submitInquiry } from "@/actions/site";
 import { bnDate } from "@/lib/utils";
-import Link from "next/link";
+import { TLink } from "@/components/site/tlink";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "শিক্ষার্থী ও অভিভাবক কর্নার" };
@@ -49,7 +49,7 @@ export default async function PortalPage({ params }: Params) {
             { href: "/academics", icon: "book", label: "পাঠক্রম", sub: "শ্রেণিভিত্তিক" },
             { href: "/contact", icon: "phone", label: "যোগাযোগ", sub: "অফিসে জানান" },
           ].map((l, i) => (
-            <Link key={l.href} href={l.href} data-reveal style={{ ["--reveal-delay" as string]: `${i * 60}ms` }}
+            <TLink key={l.href} href={l.href} data-reveal style={{ ["--reveal-delay" as string]: `${i * 60}ms` }}
               className="lift rounded-2xl bg-white hairline p-6 flex items-center gap-4">
               <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand">
                 <Icon name={l.icon} size={22} />
@@ -58,7 +58,7 @@ export default async function PortalPage({ params }: Params) {
                 <span className="block font-bold text-n-900">{l.label}</span>
                 <span className="block text-[13px] text-n-500">{l.sub}</span>
               </span>
-            </Link>
+            </TLink>
           ))}
         </div>
       </Section>
@@ -69,14 +69,14 @@ export default async function PortalPage({ params }: Params) {
           <SectionHead align="left" eyebrow="সাম্প্রতিক" title="শিক্ষার্থীদের জন্য নোটিশ" className="!mb-7" />
           <div className="rounded-2xl bg-white hairline overflow-hidden max-w-3xl">
             {notices.map((n, i) => (
-              <Link key={n._id} href={`/notice/${n._id}`}
+              <TLink key={n._id} href={`/notice/${n._id}`}
                 className={`flex items-start gap-3 p-5 hover:bg-brand-50/60 transition ${i ? "border-t border-n-100" : ""}`}>
                 <Icon name="file" size={18} className="mt-1 shrink-0 text-brand" />
                 <span>
                   <span className="block font-semibold text-n-900 leading-snug">{n.title}</span>
                   <span className="block text-[13px] text-n-400 mt-0.5">{bnDate(n.createdAt)}</span>
                 </span>
-              </Link>
+              </TLink>
             ))}
           </div>
         </Section>
