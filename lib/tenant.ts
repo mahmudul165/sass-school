@@ -29,12 +29,29 @@ export async function getTenantByHost(host: string): Promise<Tenant | null> {
     লিংকটি শুরু থেকেই সঠিক দেওয়া হয়। লোকালে পোর্ট (3000/3001) ধরে রাখা হয়,
     না হলে ডেমো চলাকালীন লিংক ভেঙে যেত। */
 export async function platformUrl(path = "/") {
-  let port = "";
-  if (IS_LOCAL) {
-    const host = (await headers()).get("host") || "";
-    port = host.includes(":") ? `:${host.split(":")[1]}` : "";
-  }
-  return `${IS_LOCAL ? "http" : "https"}://${ROOT}${port}${path}`;
+  const h = await headers();
+  const hostHeader = h.get("host") || "";
+  const bareHost = hostHeader.split(":")[0];
+  const port = hostHeader.includes(":") ? `:${hostHeader.split(":")[1]}` : "";
+
+  /* প্ল্যাটফর্মের হোস্ট ঠিক করা।
+
+     আগে সরাসরি ROOT_DOMAIN বসানো হতো, আর সেটি না থাকলে ডিফল্ট "localhost"।
+     ফলে Vercel-এ ROOT_DOMAIN সেট না থাকলে অ্যাডমিনের প্রতিটি লিংক হতো
+     http://localhost/admin/login — দর্শকের ব্রাউজার নিজের ৮০ পোর্টে গিয়ে
+     ERR_CONNECTION_REFUSED দেখাত।
+
+     এখন ROOT_DOMAIN তখনই মানা হয় যখন বর্তমান হোস্ট সত্যিই তার অধীনে;
+     নইলে চলমান অনুরোধের হোস্টই ব্যবহার হয়। তাই পরিবেশ-চলক ভুল থাকলেও
+     লিংক অন্তত কাজ করে। */
+  const configured = (process.env.ROOT_DOMAIN || "").trim().toLowerCase();
+  const underRoot = configured && (bareHost === configured || bareHost.endsWith(`.${configured}`));
+  const platformHost = underRoot ? configured : bareHost;
+
+  const isLocalHost = /^(localhost|127\.0\.0\.1)$/.test(platformHost) || platformHost.endsWith(".localhost");
+  const proto = h.get("x-forwarded-proto") || (isLocalHost ? "http" : "https");
+
+  return `${proto}://${platformHost}${port}${path}`;
 }
 
 export function hostsForTenant(t: { slug: string; customDomain?: string | null }) {

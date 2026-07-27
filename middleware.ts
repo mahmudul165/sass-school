@@ -62,9 +62,17 @@ export default function middleware(req: NextRequest) {
     const port = hostHeader.includes(":") ? `:${hostHeader.split(":")[1]}` : "";
     const isLocal = /(^|\.)localhost$/.test(host) || host === "127.0.0.1";
     const proto = req.headers.get("x-forwarded-proto") || (isLocal ? "http" : "https");
+    /* ROOT_DOMAIN তখনই মানা হয় যখন বর্তমান হোস্ট সত্যিই তার অধীনে।
+       নইলে টেন্যান্টের হোস্ট থেকে প্রথম অংশটি বাদ দিয়ে মূল ডোমেইন ধরা হয়।
+       কারণ ROOT_DOMAIN সেট না থাকলে এটি "localhost"-এ নেমে আসত, আর লাইভ
+       সাইটে /admin চাপলে দর্শক http://localhost/admin-এ গিয়ে
+       ERR_CONNECTION_REFUSED দেখতেন। */
+    const target = host.endsWith(`.${root}`) || host === root
+      ? root
+      : host.split(".").length > 2 ? host.split(".").slice(1).join(".") : root;
     return new NextResponse(null, {
       status: 307,
-      headers: { Location: `${proto}://${root}${port}${pathname}${search}` },
+      headers: { Location: `${proto}://${target}${port}${pathname}${search}` },
     });
   }
   // সাবডোমেইন / কাস্টম ডোমেইন → tenant সাইটে internal rewrite
