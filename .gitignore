@@ -1,0 +1,39 @@
+# নির্ভরতা
+/node_modules
+/.pnp
+.pnp.js
+
+# Next.js বিল্ড
+/.next/
+/out/
+/build
+next-env.d.ts
+
+# পরিবেশ ও গোপন তথ্য — কখনো কমিট নয়
+# .env-এ ডেটাবেসের সংযোগ-তার ও গোপন কি থাকে; পাবলিক রিপোতে গেলে
+# যে কেউ ডেটাবেসে ঢুকে পড়তে পারে। উদাহরণ হিসেবে .env.example রইল।
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# আপলোড করা ফাইল
+/public/uploads
+
+# লগ
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# পরীক্ষা ও ক্যাশ
+/coverage
+.turbo
+*.tsbuildinfo
+
+# সম্পাদক ও অপারেটিং সিস্টেম
+.DS_Store
+Thumbs.db
+.idea
+.vscode/*
+!.vscode/extensions.json
