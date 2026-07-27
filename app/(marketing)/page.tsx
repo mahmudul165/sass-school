@@ -51,11 +51,18 @@ export default async function Landing() {
 
   /* ডেমো সাইটের ঠিকানা অনুরোধের host থেকেই গড়া হয় — তাই স্থানীয়ভাবে
      পোর্টসহ (demo-govt.localhost:3000) আর লাইভে আসল ডোমেইনে
-     (demo-govt.amaderschool.com) দুই জায়গাতেই ঠিকঠাক কাজ করে। */
+     (demo-govt.amaderschool.com) দুই জায়গাতেই ঠিকঠাক কাজ করে।
+
+     ব্যতিক্রম *.vercel.app: ওখানে ইচ্ছেমতো সাবডোমেইনের DNS নেই, তাই
+     demo-govt.<project>.vercel.app কখনো খোলে না (ERR_CONNECTION_CLOSED)।
+     সেক্ষেত্রে /demo/<slug> পথে পাঠানো হয় — কুকি বসিয়ে middleware পুরো
+     সাইটটিকে মূল ডোমেইনেই দেখায়। কাস্টম ডোমেইনে ওয়াইল্ডকার্ড যোগ করলে
+     আপনা-আপনি আবার সাবডোমেইন ব্যবহার হবে। */
   const h = await headers();
   const host = h.get("host") || root;
   const proto = h.get("x-forwarded-proto") || (/^(localhost|127\.0\.0\.1)(:|$)/.test(host) ? "http" : "https");
-  const demoUrl = (slug: string) => `${proto}://${slug}.${host}`;
+  const wildcardOk = !/\.vercel\.app$/i.test(host);
+  const demoUrl = (slug: string) => (wildcardOk ? `${proto}://${slug}.${host}` : `/demo/${slug}`);
 
   return (
     <main className="min-h-screen bg-canvas paper-grain text-ink">

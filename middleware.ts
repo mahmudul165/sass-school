@@ -22,6 +22,19 @@ export default function middleware(req: NextRequest) {
   // 127.0.0.1-ও ধরা হয়: কিছু ব্রাউজার/টুল "localhost" খুলতে দেয় না, তখন
   // অ্যাডমিন প্যানেল পরীক্ষা করার আর কোনো উপায় থাকত না।
   if (host === root || host === "localhost" || host === "127.0.0.1" || host.endsWith(".vercel.app")) {
+    /* ডেমো প্রিভিউ — সাবডোমেইন ছাড়াই টেন্যান্ট সাইট দেখানোর উপায়।
+       কেন দরকার: Vercel-এর *.vercel.app ঠিকানায় ইচ্ছেমতো সাবডোমেইন
+       বানানো যায় না (DNS-ই নেই), তাই demo-govt.<project>.vercel.app
+       কখনো খুলবে না — ERR_CONNECTION_CLOSED। কাস্টম ডোমেইন যুক্ত না করা
+       পর্যন্ত এই কুকিটিই বিকল্প: /demo/<slug> একবার খুললে কুকি বসে, আর
+       তারপর মূল ডোমেইনের সব পথ ওই প্রতিষ্ঠানের সাইটে রূপান্তরিত হয়।
+       ফলে টেমপ্লেটের ভেতরের "/about", "/notice" লিংকগুলোও অবিকল কাজ করে —
+       একটি লিংকও বদলাতে হয় না। */
+    const demo = req.cookies.get("demo-tenant")?.value;
+    const RESERVED = /^\/(admin|super|api|demo|_next)(\/|$)/;
+    if (demo && !RESERVED.test(pathname)) {
+      return NextResponse.rewrite(new URL(`/s/${demo}${pathname}${search}`, req.url));
+    }
     return NextResponse.next();
   }
   // admin ও super কখনো tenant ডোমেইনে নয়
