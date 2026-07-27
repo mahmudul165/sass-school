@@ -17,6 +17,7 @@
 import { TLink } from "@/components/site/tlink";
 import type { Template, HomeData, NavItem, TenantX, Notice } from "./types";
 import { buildNav, footerLinks, show } from "./types";
+import { tenantBase, withBase } from "@/lib/base";
 import { Icon, WhatsAppIcon, FacebookIcon, YouTubeIcon, MessengerIcon } from "@/components/site/icons";
 import {
   Section, Btn, Pill, NoticeTicker, FAQ, Stars, MapEmbed, Figure, Avatar, CheckList, FeeTable,

@@ -189,9 +189,13 @@ export function MobileNav({ nav, name, logo, phone, whatsapp, accentClass = "bg-
 /* ── ৪. ভাসমান কনভার্সন বোতাম ───────────────────────────
    বাংলাদেশে অভিভাবক ফর্ম ভরার চেয়ে সরাসরি কল/WhatsApp করতে বেশি স্বচ্ছন্দ —
    তাই এগুলো সবসময় হাতের নাগালে (মোবাইলে থাম্ব-জোনে) থাকে। */
-export function FloatingActions({ phone, whatsapp, messenger, waText, labels }: {
+export function FloatingActions({ phone, whatsapp, messenger, waText, labels, base = "" }: {
   phone?: string; whatsapp?: string; messenger?: string; waText?: string;
   labels?: { call?: string; admission?: string; top?: string };
+  /* পথ-ভিত্তিক ঠিকানায় ("/demo-govt") ভর্তির লিংকও ভিত্তি-পথ পায়।
+     এটি ক্লায়েন্ট কম্পোনেন্ট বলে নিজে হেডার পড়তে পারে না, তাই
+     layout থেকে পাঠানো হয়। সাবডোমেইনে ফাঁকা — কিছুই বদলায় না। */
+  base?: string;
 }) {
   const L = { call: "এখনই কল করুন", admission: "ভর্তি তথ্য", top: "উপরে যান", ...labels };
   const [up, setUp] = useState(false);
@@ -235,7 +239,7 @@ export function FloatingActions({ phone, whatsapp, messenger, waText, labels }: 
           <a href={`tel:${phone}`} className="flex-1 h-12 rounded-xl bg-brand text-brand-on font-bold grid place-items-center">
             <span className="flex items-center gap-2"><Icon name="phone" size={18} /> {L.call}</span>
           </a>
-          <Link href="/admission" className="h-12 px-5 rounded-xl bg-accent text-accent-on font-bold grid place-items-center whitespace-nowrap">
+          <Link href={`${base}/admission`} className="h-12 px-5 rounded-xl bg-accent text-accent-on font-bold grid place-items-center whitespace-nowrap">
             {L.admission}
           </Link>
         </div>

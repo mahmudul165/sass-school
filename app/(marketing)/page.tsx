@@ -62,7 +62,7 @@ export default async function Landing() {
   const host = h.get("host") || root;
   const proto = h.get("x-forwarded-proto") || (/^(localhost|127\.0\.0\.1)(:|$)/.test(host) ? "http" : "https");
   const wildcardOk = !/\.vercel\.app$/i.test(host);
-  const demoUrl = (slug: string) => (wildcardOk ? `${proto}://${slug}.${host}` : `/demo/${slug}`);
+  const demoUrl = (slug: string) => (wildcardOk ? `${proto}://${slug}.${host}` : `/${slug}`);
 
   return (
     <main className="min-h-screen bg-canvas paper-grain text-ink">

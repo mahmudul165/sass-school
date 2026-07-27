@@ -5,6 +5,7 @@ import { cachedContent } from "@/lib/dal";
 import { getTemplate } from "@/templates/registry";
 import { paletteVars } from "@/lib/color";
 import { FloatingActions } from "@/components/site/interactive";
+import { tenantBase } from "@/lib/base";
 import { ServiceWorker } from "@/components/site/sw-register";
 import { NavProgress } from "@/components/site/nav-progress";
 import { NavRecovery } from "@/components/site/nav-recovery";
@@ -108,6 +109,7 @@ export default async function TenantLayout({ children, params }: P & { children:
       <NavRecovery />
       <FloatingActions
         phone={c.phone} whatsapp={c.whatsapp} messenger={c.messenger}
+        base={await tenantBase()}
         labels={isEn ? { call: "Call now", admission: "Admission" } : undefined}
         waText={isEn
           ? `Hello, I would like to know more about ${tenant.name}.`
