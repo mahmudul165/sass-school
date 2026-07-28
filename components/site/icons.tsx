@@ -9,7 +9,7 @@ import {
   Phone, Mail, MapPin, Clock, ChevronDown, ChevronRight, ChevronLeft, Menu, X, Search,
   Download, ArrowRight, ArrowUpRight, Play, Quote, Star, Check, CalendarDays, FileText,
   ExternalLink, Plus, Minus, Building2, Newspaper, Images, UserCheck, ClipboardList,
-  Banknote, Bell, Landmark, Target, Lightbulb, HandHeart, PhoneCall,
+  Banknote, Bell, Landmark, Target, Lightbulb, HandHeart, PhoneCall, AlertCircle,
 } from "lucide-react";
 import type { ComponentType, SVGProps } from "react";
 
@@ -29,6 +29,9 @@ const MAP: Record<string, IconComp> = {
   news: Newspaper, images: Images, userCheck: UserCheck, clipboard: ClipboardList,
   money: Banknote, bell: Bell, landmark: Landmark, target: Target, bulb: Lightbulb,
   handHeart: HandHeart, phoneCall: PhoneCall,
+  /* ভুলের বার্তায় লাগে। আগে ছিল না বলে Icon-এর ফলব্যাক (Sparkles ✨)
+     বসত — ভুল বোঝানোর জন্য সবচেয়ে খারাপ চিহ্ন। */
+  alert: AlertCircle,
 };
 
 /** নাম দিয়ে আইকন — অজানা নাম হলে নিরাপদ ফলব্যাক (কখনো ক্র্যাশ নয়) */

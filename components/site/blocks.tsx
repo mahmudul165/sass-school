@@ -176,13 +176,57 @@ export function RoutineTables({ routine, lang = "bn" }: { routine: RoutineTable[
               <h2 className="font-display t-h3 text-n-900 inline-flex items-center gap-2.5">
                 <Icon name="calendar" size={20} className="text-brand" /> {r.title}
               </h2>
+              {/* ৪২px ছিল — ভিজে আঙুলের নিরাপদ সীমার নিচে, আর `!` থাকায়
+                  globals.css-এর ৪৮px ভিত্তিকেও হারিয়ে দিত */}
               {r.pdfUrl && (
                 <Btn href={r.pdfUrl} variant="outline" external icon="download"
-                  className="!min-h-[42px] !px-4 !text-[14px]">{t.routineDownload}</Btn>
+                  className="!min-h-[48px] !px-4 !text-[14px]">{t.routineDownload}</Btn>
               )}
             </div>
 
-            <div className="overflow-x-auto rounded-2xl border border-n-200 bg-white">
+            {/* ── ফোনে: প্রতিটি দিন একটি কার্ড ─────────────────────
+                আগে এখানে শুধু টেবিলটিই ছিল — min-w-[640px], ভিতরে
+                overflow-x-auto, আর প্রথম কলাম sticky। ৩৬০px পর্দায় তার
+                মানে রুটিনের ৪৪% দেখা যায়, বাকিটা ডানে টেনে খুঁজতে হয়।
+                অভিভাবক "বুধবার তৃতীয় ঘণ্টায় কী" জানতে এসে দুই দিকে স্ক্রল
+                করতে বাধ্য হতেন, আর কোন কলামে আছেন তা মাথায় রাখতে হতো।
+
+                এখন দিনভিত্তিক কার্ড: প্রশ্নটাই যেহেতু "এই দিনে কী", কার্ডই
+                প্রশ্নের আকার। md থেকে আসল টেবিল ফিরে আসে — সেখানে পুরো
+                সপ্তাহ একসাথে দেখাটাই কাজে লাগে। */}
+            <div className="md:hidden space-y-3">
+              {r.rows.map((row, i) => (
+                <div key={row.day} className="rounded-2xl border border-n-200 bg-white overflow-hidden">
+                  <p className="px-3 py-2.5 font-bold text-[15px] text-white" style={{ background: "var(--brand-700)" }}>
+                    {row.day}
+                  </p>
+                  <dl>
+                    {row.cells.map((c, ci) => {
+                      const [head, time] = (r.periods[ci] || "").split("·").map((s) => s.trim());
+                      const isBreak = /বিরতি|টিফিন|break|Break/i.test(c);
+                      return (
+                        <div key={ci}
+                          className={`flex gap-2 px-3 py-2.5 ${ci ? "border-t border-n-100" : ""} ${isBreak ? "bg-accent-50" : ""}`}>
+                          <dt className="w-[38%] shrink-0 text-[13px] font-semibold text-n-500 leading-snug">
+                            {n(head, lang)}
+                            {time && <span className="block font-medium text-[11.5px] tnum opacity-80">{n(time, lang)}</span>}
+                          </dt>
+                          <dd className={`flex-1 text-[14.5px] leading-snug ${isBreak ? "font-semibold text-accent-800" : "text-n-800"}`}>
+                            {c}
+                          </dd>
+                        </div>
+                      );
+                    })}
+                  </dl>
+                </div>
+              ))}
+            </div>
+
+            {/* ── ট্যাবলেট ও তার উপরে: আসল টেবিল ─────────────────
+                min-w-[640px] রইল, কিন্তু এখন সেটি md-এর নিচে রেন্ডারই হয়
+                না — তাই অনুভূমিক স্ক্রল কেবল তখনই আসে যখন পর্দা সত্যিই
+                সরু, আর sticky প্রথম কলাম সেখানে কাজেরই। */}
+            <div className="hidden md:block overflow-x-auto rounded-2xl border border-n-200 bg-white">
               <table className="w-full text-left border-collapse min-w-[640px]">
                 <caption className="sr-only">{r.title}</caption>
                 <thead>

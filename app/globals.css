@@ -142,6 +142,63 @@ img, video { max-width: 100%; height: auto; }
 /* সংখ্যা ইংরেজি হলে ট্যাবুলার — কাউন্টার লাফায় না */
 .tnum { font-variant-numeric: tabular-nums; }
 
+/* ── মোবাইল ভিত্তি ───────────────────────────────────────────
+   ৩৬০px অ্যান্ড্রয়েড, ভিজে আঙুল, এক হাতে ব্যবহার — এই তিনটি নিয়ম
+   একবারেই বসানো, যাতে প্রতিটি কম্পোনেন্টে আলাদা করে একই জোড়াতালি
+   দিতে না হয়।
+
+   নিয়ম দুটি @layer base-এ, একটি বাইরে — পার্থক্যটা ইচ্ছাকৃত, নিচে
+   প্রতিটির সাথে কারণ লেখা আছে। */
+@layer base {
+  /* flex ও grid সন্তানের ডিফল্ট min-width:auto তাকে নিজের কনটেন্টের
+     চেয়ে ছোট হতে দেয় না। ফলে ভিতরে একটি লম্বা লিংক, ইমেইল, বা
+     white-space:nowrap টেবিল-ঘর থাকলেই গোটা পাতা ডানে উপচে পড়ে এবং
+     অনুভূমিক স্ক্রলবার এসে যায়। বাংলায় সমস্যাটি ল্যাটিনের চেয়ে বেশি —
+     যুক্তাক্ষরে শব্দ ভাঙার সুযোগ কম, তাই শব্দগুলো লম্বা অটুট খণ্ড হয়ে
+     থাকে।
+
+     এটাই উপচে পড়ার আসল উৎস। body-তে overflow-x:hidden দিলে স্ক্রলবারটি
+     শুধু লুকাত — কনটেন্ট তখনো পর্দার বাইরে থেকে যেত, আর সেটি ছুঁয়ে
+     দেখারও উপায় থাকত না। তাই কারণেই হাত দেওয়া হলো।
+
+     base স্তরে রাখা, যাতে দরকারমতো min-w-* ইউটিলিটি দিয়ে জায়গামতো
+     ফিরিয়ে নেওয়া যায়। */
+  * { min-width: 0; }
+
+  /* ৪৮px-এর ছোট লক্ষ্য ভিজে আঙুলে ও সস্তা টাচ প্যানেলে ফসকায়।
+     height নয়, min-height — বাংলা লেখা দুই লাইন হলে বোতাম বাড়তে পারবে,
+     ভিতরের লেখা কাটা পড়বে না।
+
+     text-transform:none — .t-eyebrow ও .gz-eyebrow uppercase বসায়;
+     তাদের ভিতরে বোতাম পড়লে ইংরেজি লেখা যেন গড়িয়ে বড় হাতের না হয়।
+
+     ব্যতিক্রম দরকার হলে min-h-* ইউটিলিটি — নতুন কোনো ক্লাস বা
+     কম্পোনেন্ট-প্যাচ লাগে না। */
+  button,
+  summary,
+  [role="button"],
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"] {
+    min-height: 48px;
+    text-transform: none;
+  }
+}
+
+/* ইনপুটের লেখা ১৬px-এর নিচে নামলে iOS ফোকাস করামাত্র পুরো পাতা জুম করে
+   দেয়, আর নিজে থেকে আর ফেরত আসে না — ফর্ম ভরার সবচেয়ে সাধারণ মোবাইল
+   ভাঙন, এবং কম-অভ্যস্ত ব্যবহারকারীর কাছে এটি "সাইট নষ্ট হয়ে গেল"।
+
+   নিয়মটি ইচ্ছাকৃতভাবে layer-এর বাইরে রাখা: layer-বহির্ভূত CSS সব
+   ইউটিলিটিকে হারায়, তাই কোথাও ভুল করে text-sm/text-xs বসে গেলেও ইনপুট
+   আর ১৬px-এর নিচে নামতে পারে না। এটিই এই নিয়মের পুরো উদ্দেশ্য।
+
+   এর মূল্য: ইনপুটে text-* ইউটিলিটি আর কাজ করে না। ইচ্ছাকৃতভাবে বড়
+   ইনপুট (যেমন বড় সার্চ বাক্স) --input-fs দিয়ে নিজের মাপ বলে দেবে,
+   যেমন class="[--input-fs:1.25rem]"। max() থাকায় নিচের সীমা তখনো
+   বাঁধা, আর ডিফল্ট 1em body-র ১৬.৫px উত্তরাধিকার অক্ষত রাখে। */
+input, select, textarea { font-size: max(16px, var(--input-fs, 1em)); }
+
 /* ── লেআউট হেল্পার ───────────────────────────────────────── */
 .container-x { width: 100%; margin-inline: auto; padding-inline: 1.25rem; max-width: 1200px; }
 @media (min-width: 768px) { .container-x { padding-inline: 2rem; } }
@@ -159,9 +216,15 @@ img, video { max-width: 100%; height: auto; }
 .t-h3 { font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem); line-height: 1.35; font-weight: 700; }
 .t-lead { font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem); line-height: 1.75; }
 .t-small { font-size: 0.875rem; line-height: 1.6; }
+/* uppercase ও letter-spacing দুটোই সরানো হলো।
+   বাংলায় বড়-ছোট হাতের ধারণাই নেই, তাই uppercase বাংলা লেখায় নিছক
+   নিষ্ক্রিয় — কিন্তু এই টেমপ্লেট দুটি ইংরেজিতেও চলে, আর সেখানে এটি
+   পুরো লেখাকে বড় হাতের করে দিত: পড়ার গতি কমে, আর শব্দের চেনা আকৃতি
+   হারিয়ে কম-অভ্যস্ত পাঠকের কষ্ট বাড়ে।
+   letter-spacing আরও ক্ষতিকর — বাংলা যুক্তাক্ষর একক গ্লিফ হিসেবে বসে,
+   জোর করে ফাঁক বাড়ালে অক্ষরগুলো আলগা ও ভাঙা দেখায়। */
 .t-eyebrow {
-  font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 0.8125rem; font-weight: 700;
 }
 
 /* ── ইফেক্ট ──────────────────────────────────────────────── */
@@ -249,18 +312,48 @@ img, video { max-width: 100%; height: auto; }
 
 /* নোটিশ টিকার */
 .marquee { overflow: hidden; }
-.marquee > * { display: inline-flex; white-space: nowrap; animation: marquee-x var(--marquee-dur, 32s) linear infinite; }
+/* ট্র্যাকটি সবসময় নিজের কনটেন্টের পূর্ণ মাপে থাকবে — সংকুচিত হবে না।
+   flex ও min-width দুটোই স্পষ্ট করে লেখা দরকার, কারণ:
+
+   ট্র্যাক .marquee-এর একটি flex সন্তান। আগে এটি ঠিক থাকত ব্রাউজারের
+   ডিফল্ট min-width:auto-র উপর ভরসা করে — flex আইটেম নিজের min-content-এর
+   চেয়ে ছোট হতে পারত না। উপরের মোবাইল-ভিত্তিতে `* { min-width: 0 }` বসানোর
+   পর সেই রক্ষাকবচ উঠে যায়: ট্র্যাক পাত্রের মাপে চেপে যেত, ভিতরের প্রতিটি
+   নোটিশ প্রায় শূন্য প্রস্থে নেমে আসত, অথচ white-space:nowrap থাকায় লেখা
+   ঠিকই আঁকা হতো — ফলে সব নোটিশ একটির উপর আরেকটি ছাপা হয়ে জট পাকিয়ে যেত।
+
+   min-width:0 তুলে না দিয়ে এখানেই ঠিক করা হলো, কারণ উপচে পড়ার আসল
+   সমাধান ওটিই; বরং এই ট্র্যাকের নির্ভরতাটুকু অস্পষ্ট ছিল, সেটি স্পষ্ট
+   করে লেখা হলো।
+
+   max-content জরুরি অন্য কারণেও: marquee-x -৫০% সরায়, আর আইটেমগুলো
+   ইচ্ছাকৃতভাবে দ্বিগুণ করা — ট্র্যাক ঠিক কনটেন্টের মাপে না হলে লুপটি
+   নিরবচ্ছিন্ন থাকে না, মাঝপথে লাফ দেয়। */
+.marquee > * {
+  display: inline-flex;
+  flex: 0 0 auto;
+  min-width: max-content;
+  white-space: nowrap;
+  animation: marquee-x var(--marquee-dur, 32s) linear infinite;
+}
 .marquee:hover > * { animation-play-state: paused; }
 
 /* অনুভূমিক স্ন্যাপ ক্যারোসেল — JS ছাড়াই মসৃণ */
-.snap-row {
-  display: flex; gap: 1rem; overflow-x: auto;
-  scroll-snap-type: x mandatory; scroll-behavior: smooth;
-  scrollbar-width: none; -ms-overflow-style: none;
-  padding-block: 0.5rem;
+/* .nav-row-এর মতোই একই কারণে components স্তরে — অভিভাবকের মতামত অংশে
+   ক্লাসটি লেখা হয় `snap-row … md:grid md:grid-cols-2` হিসেবে, অর্থাৎ
+   ডেস্কটপে গ্রিড হওয়ার কথা। layer-বহির্ভূত থাকায় `.snap-row`-এর
+   display:flex `md:grid`-কেও হারিয়ে দিত, ফলে বড় পর্দাতেও কার্ডগুলো
+   পাশাপাশি স্ক্রল-সারিতেই থেকে যেত। */
+@layer components {
+  .snap-row {
+    display: flex; gap: 1rem; overflow-x: auto;
+    scroll-snap-type: x mandatory; scroll-behavior: smooth;
+    scrollbar-width: none; -ms-overflow-style: none;
+    padding-block: 0.5rem;
+  }
+  .snap-row::-webkit-scrollbar { display: none; }
+  .snap-row > * { scroll-snap-align: start; flex: 0 0 auto; }
 }
-.snap-row::-webkit-scrollbar { display: none; }
-.snap-row > * { scroll-snap-align: start; flex: 0 0 auto; }
 
 /* ============================================================
    সিগনেচার টেক্সচার — প্রতিটি টেমপ্লেটের নিজস্ব "আঙুলের ছাপ"
@@ -448,19 +541,31 @@ img, video { max-width: 100%; height: auto; }
    দুই লাইনে চলে যেত এবং পুরো পেজে অনুভূমিক স্ক্রলবার এনে দিত — দুটোই দৃষ্টিকটু।
    সমাধান: লেখা কখনো ভাঙে না (nowrap), আর না আঁটলে মেনুটুকুই পাশে স্ক্রল করে,
    পেজ নয়। স্ক্রলবার লুকানো, কারণ ডেস্কটপে সেটি নোংরা দেখায়। */
-.nav-row {
-  display: flex;
-  flex-wrap: nowrap;
-  min-width: 0;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+/* @layer components — কেন এটি জরুরি, নিছক সাজানো নয়:
+
+   এই ফাইলের হেল্পার ক্লাসগুলো কোনো layer-এ ছিল না। CSS-এ layer-বহির্ভূত
+   নিয়ম সব layer-কে হারায় — অর্থাৎ Tailwind-এর ইউটিলিটিকেও। ফলে
+   `class="hidden lg:flex nav-row"` লেখা থাকলেও `.hidden` (utilities স্তরে)
+   `.nav-row`-এর display:flex-কে হারাতে পারত না, আর ডেস্কটপের মেনু-সারিটি
+   ফোনেও দেখা যেত — "মেনু" লেখা ও হ্যামবার্গারের সাথে জট পাকিয়ে।
+
+   components স্তরে নামালে ইউটিলিটি আবার উপরে ওঠে, আর ক্লাসটির নিজের
+   আচরণ অপরিবর্তিত থাকে। */
+@layer components {
+  .nav-row {
+    display: flex;
+    flex-wrap: nowrap;
+    min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .nav-row::-webkit-scrollbar { display: none; }
+  .nav-row > * { flex: 0 0 auto; white-space: nowrap; }
+  /* শেষ আইটেমের ডানে একটু শ্বাস — প্রান্ত ঘেঁষে থাকলে "কাটা পড়েছে" মনে হয় */
+  .nav-row::after { content: ""; flex: 0 0 8px; }
 }
-.nav-row::-webkit-scrollbar { display: none; }
-.nav-row > * { flex: 0 0 auto; white-space: nowrap; }
-/* শেষ আইটেমের ডানে একটু শ্বাস — প্রান্ত ঘেঁষে থাকলে "কাটা পড়েছে" মনে হয় */
-.nav-row::after { content: ""; flex: 0 0 8px; }
 
 /* OFFICIAL — চার্ট
    দণ্ডে হোভার করলে বাকিগুলো ম্লান হয়, ফলে চোখ এক বছরের উপর স্থির হয়।

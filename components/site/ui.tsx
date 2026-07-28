@@ -62,7 +62,13 @@ type BtnProps = {
 export function Btn({
   href, children, variant = "primary", size = "md", className = "", icon, iconRight, external, title, download,
 }: BtnProps) {
-  const sizes = size === "lg" ? "min-h-[56px] px-8 text-[17px]" : "min-h-[52px] px-6 text-[16px]";
+  /* পাশের প্যাডিং ফোনে ছোট, sm থেকে আগের মাপ।
+     এই প্রকল্পে --spacing দ্বিগুণ, তাই px-6 মানে ছিল দুই পাশে ৪৮px (মোট
+     ৯৬px) আর px-8 মানে ৬৪px (মোট ১২৮px)। ৩৬০px পর্দায় container-x-এর পর
+     থাকে ৩২০px — অর্থাৎ বড় বোতামে লেখার জন্য বাকি থাকত ~১৯০px, আর
+     "অনলাইনে আবেদন করুন"-এর মতো বাংলা লেবেল দুই লাইনে ভেঙে যেত।
+     ফোনে ৩২/৪০px যথেষ্ট; min-height অপরিবর্তিত, তাই লক্ষ্য ছোট হয়নি। */
+  const sizes = size === "lg" ? "min-h-[56px] px-5 sm:px-8 text-[17px]" : "min-h-[52px] px-4 sm:px-6 text-[16px]";
   const variants = {
     primary: "bg-brand text-brand-on shadow-e2 hover:brightness-110 hover:shadow-e3",
     accent: "bg-accent text-accent-on shadow-e2 hover:brightness-105 hover:shadow-e3",
@@ -71,7 +77,7 @@ export function Btn({
     white: "bg-white text-brand shadow-e2 hover:shadow-e3",
     whatsapp: "text-white shadow-e2 hover:brightness-110",
   }[variant];
-  const cls = `inline-flex items-center justify-center gap-2.5 rounded-xl font-bold transition-all duration-300 ${sizes} ${variants} ${className}`;
+  const cls = `inline-flex items-center justify-center gap-2 rounded-xl font-bold transition-all duration-300 ${sizes} ${variants} ${className}`;
   const style = variant === "whatsapp" ? { background: "#25D366" } : undefined;
   const inner = (
     <>

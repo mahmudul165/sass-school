@@ -82,7 +82,9 @@ function Head({ v, title, sub, align = "center", light = false }: {
 }) {
   const center = align === "center";
   return (
-    <div data-reveal className={`mb-9 md:mb-12 ${center ? "text-center max-w-2xl mx-auto" : "max-w-2xl"}`}>
+    /* mb-9 = ৭২px ছিল, আর এই শিরোনাম চৌদ্দটি সেকশনে বসে — ফোনে সব
+       মিলিয়ে প্রায় এক হাজার পিক্সেল নিছক ফাঁকা জায়গা */
+    <div data-reveal className={`mb-5 md:mb-12 ${center ? "text-center max-w-2xl mx-auto" : "max-w-2xl"}`}>
       <h2 className={`${v.display} t-h2 ${light ? "text-white" : "text-n-900"} inline-block relative pb-3`}>
         {title}
         {v.chrome === "islamic" ? (
@@ -125,14 +127,17 @@ function makeHeader(v: Variant): Template["Header"] {
           {v.chrome === "govt" && (
             <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, var(--brand-600) 60%, var(--accent-600) 60%)` }} />
           )}
-          <div className="container-x flex flex-wrap items-center justify-between gap-2 py-2">
+          {/* py-2 = ১৬px উপরে-নিচে ছিল। globals.css-এর নতুন ভিত্তি
+              ভাষা-বোতামকে ৪৮px উঁচু করেছে (ছিল ~২৯px), তাই পট্টিটি এমনিতেই
+              লম্বা হয়েছে; প্যাডিং কমিয়ে সেই বাড়তিটুকু ফিরিয়ে নেওয়া হলো। */}
+          <div className="container-x flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 py-1.5">
             <p className="flex items-center gap-2 opacity-90">
               <Icon name="landmark" size={14} className="shrink-0" />
               {tenant.eiin
                 ? <>{t.eiin}: <span className="tnum font-semibold">{tenant.eiin}</span> · {t.government}</>
                 : t.approved}
             </p>
-            <div className="flex items-center gap-3 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               {c.phone && (
                 <a href={`tel:${c.phone}`} className="inline-flex items-center gap-1.5 hover:underline">
                   <Icon name="phone" size={13} /> <span className="tnum">{c.phone}</span>
@@ -153,14 +158,18 @@ function makeHeader(v: Variant): Template["Header"] {
         {/* প্রতিষ্ঠানের সাইনবোর্ড */}
         <div className={`bg-white border-b border-n-200 ${v.girih ? "relative overflow-hidden" : ""}`}>
           {v.girih && <span className="tex-girih absolute inset-0 opacity-[0.35] pointer-events-none" aria-hidden="true" />}
-          <div className="container-x relative flex items-center gap-4 md:gap-6 py-4 md:py-5">
+          {/* লোগো ফোনে ৮০px, আগে ছিল ১২৮px (h-16 × দ্বিগুণ --spacing)।
+              ৩২০px সারিতে লোগো ও গ্যাপ মিলে ১৬০px খেয়ে ফেলত, ফলে
+              প্রতিষ্ঠানের নাম — পাতার সবচেয়ে জরুরি লেখা — line-clamp-2-এ
+              কাটা পড়ত। এখন নামের জন্য ২১৬px। */}
+          <div className="container-x relative flex items-center gap-3 md:gap-6 py-3 md:py-5">
             {tenant.logo
               /* সাইনবোর্ডের লোগো প্রায়ই পাতার LCP উপাদান — priority দিলে
                  এটি lazy সারিতে না দাঁড়িয়ে সঙ্গে সঙ্গে নামে। মাপ ৮০px
                  (md-এর সর্বোচ্চ), ছোট পর্দায় CSS নামিয়ে আনে। */
               ? <Image src={tenant.logo} alt="" width={80} height={80} priority
-                  className={`h-16 w-16 md:h-20 md:w-20 object-contain shrink-0 ${v.chrome === "govt" ? "rounded-full ring-2 ring-brand-200 p-1" : ""}`} />
-              : <span className={`h-16 w-16 md:h-20 md:w-20 shrink-0 grid place-items-center text-white text-2xl md:text-3xl font-extrabold
+                  className={`h-10 w-10 md:h-20 md:w-20 object-contain shrink-0 ${v.chrome === "govt" ? "rounded-full ring-2 ring-brand-200 p-1" : ""}`} />
+              : <span className={`h-10 w-10 md:h-20 md:w-20 shrink-0 grid place-items-center text-white text-2xl md:text-3xl font-extrabold
                   ${v.chrome === "modern" ? "rounded-2xl" : "rounded-full"}`}
                   style={{ background: "linear-gradient(140deg, var(--brand-600), var(--brand-800))" }}>
                   {tenant.name[0]}
@@ -180,7 +189,9 @@ function makeHeader(v: Variant): Template["Header"] {
                 {tenant.name}
               </p>
               {tenant.nameEn && <p className="font-latin text-[12.5px] md:text-[14px] text-n-500 truncate">{tenant.nameEn}</p>}
-              <p className="text-[13px] md:text-[14.5px] text-n-600 mt-0.5 truncate">
+              {/* truncate ছিল — ঠিকানা ফোনে এক লাইনে কেটে যেত, অথচ
+                  অভিভাবক ঠিক সেটিই খুঁজতে আসেন। দুই লাইন পর্যন্ত দেখা যাক। */}
+              <p className="text-[13px] md:text-[14.5px] text-n-600 mt-0.5 line-clamp-2">
                 {c.address}
                 {tenant.established && <span className="hidden sm:inline"> · {t.established} {num(tenant.established, lang)}</span>}
               </p>
@@ -191,12 +202,12 @@ function makeHeader(v: Variant): Template["Header"] {
             <div className="hidden lg:flex items-center gap-2.5 shrink-0">
               {login && (
                 <Btn href={login.href} variant="outline"
-                  className={`!min-h-[46px] !px-4 !text-[14.5px] !${v.r}`} icon="userCheck">
+                  className={`!min-h-[48px] !px-4 !text-[14.5px] !${v.r}`} icon="userCheck">
                   {login.label}
                 </Btn>
               )}
-              <Btn href="/results" variant="outline" className={`!min-h-[46px] !px-4 !text-[14.5px] !${v.r}`} icon="trophy">{t.navResults}</Btn>
-              <Btn href="/admission#apply" variant="accent" className={`!min-h-[46px] !px-5 !text-[15px] !${v.r}`}>{t.applyOnline}</Btn>
+              <Btn href="/results" variant="outline" className={`!min-h-[48px] !px-4 !text-[14.5px] !${v.r}`} icon="trophy">{t.navResults}</Btn>
+              <Btn href="/admission#apply" variant="accent" className={`!min-h-[48px] !px-5 !text-[15px] !${v.r}`}>{t.applyOnline}</Btn>
             </div>
           </div>
         </div>
@@ -233,8 +244,10 @@ function makeHeader(v: Variant): Template["Header"] {
         </StickyHeader>
 
         {notices.length > 0 && (
+          /* h-11 = ৮৮px ছিল — চলমান নোটিশের একটি লাইনের জন্য বাড়াবাড়ি,
+             আর হেডারের স্তূপ ইতিমধ্যেই লম্বা। ৫৬px যথেষ্ট। */
           <NoticeTicker notices={notices.slice(0, 6)} label={t.secLatestNotice}
-            className="bg-white border-b border-n-200 text-n-700 h-11 no-print" />
+            className="bg-white border-b border-n-200 text-n-700 h-7 md:h-11 no-print" />
         )}
       </>
     );
@@ -248,14 +261,19 @@ function Hero({ v, d }: { v: Variant; d: HomeData }) {
   const t = dict(lang);
   const images = tenant.heroImages?.length ? tenant.heroImages : tenant.heroImage ? [tenant.heroImage] : [];
 
+  /* ফোনে দুটি বোতামই পুরো প্রস্থে, একটির নিচে আরেকটি।
+     আগে flex-wrap ছিল — সরু পর্দায় সেগুলো আধা-প্রস্থে পাশাপাশি বসে
+     যেত বা অসমভাবে ভেঙে যেত, আর বাংলা লেবেল দুই লাইনে চলে যেত।
+     পুরো প্রস্থের বোতাম এক হাতে ধরা ফোনে বুড়ো আঙুলের সবচেয়ে সহজ লক্ষ্য,
+     আর কোনটি প্রধান কাজ তাও স্পষ্ট থাকে। sm থেকে আগের বিন্যাস। */
   const ctas = (
-    <div className="mt-6 flex flex-wrap gap-3">
-      <Btn href="/admission#apply" variant="accent" iconRight="arrowRight" className={`!${v.r}`}>{t.applyNow}</Btn>
+    <div className="mt-6 grid gap-2.5 sm:flex sm:flex-wrap sm:gap-3">
+      <Btn href="/admission#apply" variant="accent" iconRight="arrowRight" className={`w-full sm:w-auto !${v.r}`}>{t.applyNow}</Btn>
       {tenant.contact.whatsapp && (
         <Btn href={waLink(tenant.contact.whatsapp, lang === "en"
           ? `Hello, I would like to know about admission at ${tenant.name}.`
           : `আসসালামু আলাইকুম। ${tenant.name}-এ ভর্তি সংক্রান্ত তথ্য জানতে চাই।`)}
-          variant="whatsapp" className={`!${v.r}`}>
+          variant="whatsapp" className={`w-full sm:w-auto !${v.r}`}>
           <WhatsAppIcon width={19} height={19} /> WhatsApp
         </Btn>
       )}
@@ -266,16 +284,22 @@ function Hero({ v, d }: { v: Variant; d: HomeData }) {
   if (v.hero === "board") {
     return (
       <section className="bg-n-50 border-b border-n-200">
-        <div className="container-x py-7 md:py-10 grid lg:grid-cols-[1.6fr_1fr] gap-6 items-stretch">
-          <div data-reveal className={`relative overflow-hidden ${v.r} min-h-[360px] md:min-h-[440px] flex`}>
+        {/* ৩৬০px ফোনের দৃশ্যমান উচ্চতা প্রায় ৬৪০px। ৩৬০px হিরো তার ৫৬%
+            খেয়ে নিত, ফলে নিচে যে নোটিশ বোর্ডটিই এই বিন্যাসের মূল কথা,
+            সেটি প্রথম পর্দায় ইঙ্গিতমাত্রও থাকত না। ৩০০px-এ ছবি এখনো
+            জোরালো, আর নিচের কনটেন্ট উঁকি দেয় — স্ক্রল করার কারণ তৈরি হয়। */}
+        <div className="container-x py-5 md:py-10 grid lg:grid-cols-[1.6fr_1fr] gap-4 sm:gap-6 items-stretch">
+          <div data-reveal className={`relative overflow-hidden ${v.r} min-h-[300px] md:min-h-[440px] flex`}>
             {images.length
               ? <HeroSlides images={images} alt={tenant.name} />
               : <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, var(--hero-from), var(--hero-to))" }} />}
             <div className="absolute inset-0 scrim" />
-            <div className="relative mt-auto p-6 md:p-9">
-              {tenant.admission?.open && <Pill tone="accent" dot className="mb-4 !text-[13.5px]">{content.heroKicker}</Pill>}
-              <h1 className={`${v.display} text-[26px] md:text-[40px] font-extrabold text-white leading-[1.2]`}>{content.heroTitle}</h1>
-              <p className="mt-3 text-white/85 max-w-lg text-[15.5px] md:text-[17px] leading-relaxed">{content.heroSub}</p>
+            <div className="relative mt-auto p-4 md:p-9">
+              {tenant.admission?.open && <Pill tone="accent" dot className="mb-3 sm:mb-4 !text-[13.5px]">{content.heroKicker}</Pill>}
+              {/* ২৬px বাংলা শিরোনাম ২২৪px চওড়া ঘরে চার-পাঁচ লাইনে ভেঙে
+                  স্ক্রিমের বাইরে চলে যেত; ২২px-এ তিন লাইনে থামে */}
+              <h1 className={`${v.display} text-[22px] sm:text-[26px] md:text-[40px] font-extrabold text-white leading-[1.2]`}>{content.heroTitle}</h1>
+              <p className="mt-3 text-white/85 max-w-lg text-[15px] sm:text-[15.5px] md:text-[17px] leading-relaxed">{content.heroSub}</p>
               {ctas}
             </div>
           </div>
@@ -302,7 +326,7 @@ function Hero({ v, d }: { v: Variant; d: HomeData }) {
               </ul>
             </div>
             <div className="border-t border-n-200 p-3">
-              <Btn href="/notice" variant="outline" className={`w-full !min-h-[46px] !text-[14.5px] !${v.r}`} iconRight="arrowRight">
+              <Btn href="/notice" variant="outline" className={`w-full !min-h-[48px] !text-[14.5px] !${v.r}`} iconRight="arrowRight">
                 {t.allNotices}
               </Btn>
             </div>
@@ -361,13 +385,16 @@ function Hero({ v, d }: { v: Variant; d: HomeData }) {
   /* গ. ব্যানার — পুরো প্রস্থে ছবি, উপরে বার্তা (ঐতিহ্যবাহী ও ইসলামিক) */
   return (
     <section className="relative">
-      <div className="relative min-h-[440px] md:min-h-[560px] flex">
+      {/* ব্যানার হিরো (মাদরাসা ভ্যারিয়েন্ট) — ৪৪০px ফোনের পর্দার ৬৯%
+          দখল করত। ৩৮০px-এ ছবি ও বিসমিল্লাহ পঙ্‌ক্তির মর্যাদা অক্ষত,
+          কিন্তু নিচের কনটেন্টও প্রথম পর্দায় ইঙ্গিত দেয়। */}
+      <div className="relative min-h-[380px] md:min-h-[560px] flex">
         {images.length
           ? <HeroSlides images={images} alt={tenant.name} />
           : <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, var(--hero-from), var(--hero-to))" }} />}
         <div className="absolute inset-0 scrim" />
         {v.girih && <span className="tex-girih absolute inset-0 opacity-25 pointer-events-none" aria-hidden="true" />}
-        <div className="container-x relative flex flex-col justify-end py-12 md:py-16">
+        <div className="container-x relative flex flex-col justify-end py-8 md:py-16">
           <div data-reveal className="max-w-2xl">
             {tenant.admission?.open && <Pill tone="accent" dot className="mb-5">{content.heroKicker}</Pill>}
             {v.chrome === "islamic" && <div className="rule-gold-thick w-28 mb-5" />}
@@ -396,8 +423,15 @@ function QuickTiles({ v, lang }: { v: Variant; lang: Lang }) {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
           {tiles.map((tile, i) => (
             <TLink key={tile.href} href={tile.href} data-reveal style={{ ["--reveal-delay" as string]: `${i * 70}ms` }}
-              className={`lift group ${v.r} border border-n-200 bg-white p-4 md:p-5 flex items-center gap-3 md:gap-4`}>
-              <span className={`grid h-11 w-11 md:h-12 md:w-12 shrink-0 place-items-center ${v.r} text-white transition group-hover:scale-105`}
+              className={`lift group ${v.r} border border-n-200 bg-white p-3 md:p-5 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4`}>
+              {/* ফোনে আইকন লেখার উপরে, পাশে নয়।
+                  আগে পাশে ছিল, আর --spacing দ্বিগুণ হওয়ায় h-11 মানে ৮৮px।
+                  ৩৬০px পর্দায় দুই কলামের টাইল ১৪৮px চওড়া, p-4 (৩২px×২) বাদ
+                  দিলে ভিতরে থাকে ৮৪px — আইকনটিই তার চেয়ে চওড়া। ফলে
+                  flex-1 লেখার কলাম শূন্যে নেমে যেত, আর "ভর্তি"/"ফলাফল"
+                  লেবেলগুলোই আর দেখা যেত না। উপরে-নিচে সাজালে লেখা পুরো
+                  প্রস্থ পায়। sm থেকে আগের পাশাপাশি বিন্যাস ফিরে আসে। */}
+              <span className={`grid h-6 w-6 sm:h-11 sm:w-11 md:h-12 md:w-12 shrink-0 place-items-center ${v.r} text-white transition group-hover:scale-105`}
                 style={{ background: i % 2 ? "var(--accent-600)" : "var(--brand-600)" }}>
                 <Icon name={tile.icon} size={22} />
               </span>
@@ -442,12 +476,12 @@ function About({ v, d }: { v: Variant; d: HomeData }) {
         </div>
 
         {content.trust.length > 0 && (
-          <aside data-reveal className={`${v.r} border border-n-200 bg-n-50 p-6 self-start`}>
+          <aside data-reveal className={`${v.r} border border-n-200 bg-n-50 p-4 sm:p-6 self-start`}>
             <p className={`${v.display} font-bold text-n-900 mb-5`}>{t.secStats}</p>
             <ul className="space-y-4">
               {content.trust.map((b, i) => (
                 <li key={i} className="flex gap-3.5">
-                  <span className={`grid h-11 w-11 shrink-0 place-items-center ${v.r} bg-white text-brand hairline`}>
+                  <span className={`grid h-6 w-6 sm:h-11 sm:w-11 shrink-0 place-items-center ${v.r} bg-white text-brand hairline`}>
                     <Icon name={b.icon} size={20} />
                   </span>
                   <span>
@@ -484,7 +518,7 @@ function Leaders({ v, d }: { v: Variant; d: HomeData }) {
             <p className={`px-6 py-3.5 text-white ${v.display} font-bold text-[16px]`} style={{ background: "var(--brand-700)" }}>
               {messageOf(p.role, lang)}
             </p>
-            <div className="p-6 md:p-7">
+            <div className="p-4 sm:p-6 md:p-7">
               <div className="flex items-center gap-4 pb-5 mb-5 border-b border-n-200">
                 <Avatar src={p.photo} name={p.name} size={64} rounded={v.chrome === "modern" ? "rounded-2xl" : "rounded-lg"} />
                 <div className="min-w-0">
@@ -512,12 +546,14 @@ function Stats({ v, d }: { v: Variant; d: HomeData }) {
   const tints = ["var(--brand-600)", "var(--accent-700)", "var(--brand-800)", "var(--accent-600)"];
   return (
     <Section tone="plain" size="sm">
-      <dl className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* p-6 = ৪৮px দুই পাশে; ১৪৪px ঘরে সংখ্যার জন্য বাকি থাকত ৪৮px,
+          অথচ সংখ্যাটি ৩৪px উঁচু — "৮৫০+" ঘর ছাপিয়ে যেত */}
+      <dl className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {d.content.stats.map((s, i) => (
           <div key={i} data-reveal style={{ ["--reveal-delay" as string]: `${i * 70}ms`, background: tints[i % 4] }}
-            className={`${v.r} p-6 text-white text-center`}>
+            className={`${v.r} p-4 sm:p-6 text-white text-center`}>
             <Icon name={s.icon} size={26} className="mx-auto opacity-85" />
-            <dd className="mt-3 text-[34px] font-extrabold leading-none tnum"><CountUp value={s.value} /></dd>
+            <dd className="mt-3 text-[28px] sm:text-[34px] font-extrabold leading-none tnum"><CountUp value={s.value} /></dd>
             <dt className="mt-1.5 text-[14px] opacity-85">{s.label}</dt>
           </div>
         ))}
@@ -538,8 +574,8 @@ function Departments({ v, d }: { v: Variant; d: HomeData }) {
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {items.map((dep, i) => (
           <article key={dep.name + i} data-reveal style={{ ["--reveal-delay" as string]: `${(i % 4) * 70}ms` }}
-            className={`lift ${v.r} border border-n-200 bg-white p-6 flex flex-col`}>
-            <span className={`grid h-12 w-12 place-items-center ${v.r} bg-brand-50 text-brand`}>
+            className={`lift ${v.r} border border-n-200 bg-white p-4 sm:p-6 flex flex-col`}>
+            <span className={`grid h-6 w-6 sm:h-12 sm:w-12 place-items-center ${v.r} bg-brand-50 text-brand`}>
               <Icon name={dep.icon || "book"} size={23} />
             </span>
             <h3 className={`${v.display} font-bold text-[17px] text-n-900 mt-4 leading-snug`}>{dep.name}</h3>
@@ -571,9 +607,9 @@ function WhyUs({ v, d }: { v: Variant; d: HomeData }) {
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {d.content.why.map((w, i) => (
           <div key={i} data-reveal style={{ ["--reveal-delay" as string]: `${(i % 3) * 70}ms` }}
-            className={`relative overflow-hidden ${v.r} border border-n-200 bg-white p-6 pt-7 lift`}>
+            className={`relative overflow-hidden ${v.r} border border-n-200 bg-white p-4 pt-5 sm:p-6 sm:pt-7 lift`}>
             <span className="absolute inset-x-0 top-0 h-1" style={{ background: i % 2 ? "var(--accent-600)" : "var(--brand-600)" }} />
-            <span className={`grid h-12 w-12 place-items-center ${v.r} bg-brand-50 text-brand`}>
+            <span className={`grid h-6 w-6 sm:h-12 sm:w-12 place-items-center ${v.r} bg-brand-50 text-brand`}>
               <Icon name={w.icon} size={23} />
             </span>
             <h3 className={`${v.display} font-bold text-[18px] text-n-900 mt-4`}>{w.title}</h3>
@@ -594,14 +630,20 @@ function Teachers({ v, d }: { v: Variant; d: HomeData }) {
   return (
     <Section id="teachers" tone="soft">
       <Head v={v} title={label} sub={t.subTeachers} />
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+      {/* ফোনে দুই কলাম রইল, কিন্তু প্যাডিং ছোট।
+          p-5 মানে এখানে ৪০px — দুই পাশে ৮০px। ১৪০px কার্ডে ছবির জন্য
+          বাকি থাকত ৬০px, আর নামের জন্যও ৬০px, ফলে বাংলা নাম পাঁচ-ছয়
+          লাইনে ভেঙে যেত। ২০px প্যাডিংয়ে ছবি ও নাম পায় ১০৮px।
+          এক কলামে নামানো হয়নি ইচ্ছাকৃতভাবে — শিক্ষক তালিকা প্রায়ই
+          ৪০+ জনের, এক কলামে সেটি অন্তহীন স্ক্রল হয়ে যেত। */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         {d.teachers.slice(0, 4).map((tc, i) => (
           <figure key={tc._id} data-reveal style={{ ["--reveal-delay" as string]: `${(i % 4) * 70}ms` }}
             className={`lift ${v.r} border border-n-200 bg-white overflow-hidden text-center`}>
-            <div className="p-5 pb-0">
+            <div className="p-2.5 pb-0 sm:p-5 sm:pb-0">
               <Figure src={tc.photo} alt={tc.name} ratio="aspect-[3/4]" rounded={v.r} icon="users" />
             </div>
-            <figcaption className="p-5">
+            <figcaption className="p-2.5 sm:p-5">
               <p className="font-bold text-n-900 leading-tight">{tc.name}</p>
               <p className="mt-1 text-[13.5px] text-brand font-semibold">{tc.designation}</p>
               {tc.subject && <p className="mt-0.5 text-[13px] text-n-500">{tc.subject}</p>}
@@ -624,18 +666,15 @@ function Results({ v, d }: { v: Variant; d: HomeData }) {
   return (
     <Section id="results" tone="plain">
       <Head v={v} title={t.navResults} sub={t.subResults} />
-      <div className="grid lg:grid-cols-[1fr_1.15fr] gap-8 items-start">
-        <div data-reveal className={`${v.r} p-6 md:p-7 text-white`} style={{ background: "var(--brand-800)" }}>
-          <h3 className={`${v.display} t-h3`}>{t.secResultSearch}</h3>
-          <p className="mt-2.5 text-white/75 text-[15px]">{d.content.resultPortalNote}</p>
-          <div className={`mt-6 ${v.r} bg-white p-4 md:p-5`}>
-            <ResultSearch exams={d.results} labels={searchLabels(lang)}
-              note={d.results.length ? undefined : t.emptyResults} />
-          </div>
-          <Btn href="/results" variant="white" className={`mt-5 !${v.r}`} iconRight="arrowRight">{t.viewAll}</Btn>
-        </div>
-
-        {chart && <div data-reveal style={{ ["--reveal-delay" as string]: "110ms" }}><ResultChart series={chart} lang={lang} /></div>}
+      {/* হোমপেজ থেকে ফলাফল-অনুসন্ধানের বাক্সটি সরানো হলো।
+          এটি বসত সরু বাঁ কলামে, আর ভিতরের ফর্মটি তিন কলামে ভাগ হতো —
+          সরু পাত্রে রোল ও পরীক্ষার ঘর দুটি কার্যত মিলিয়ে যেত।
+          অনুসন্ধান নিজে হারায়নি: /results পাতায় সেটি পুরো প্রস্থ পায়,
+          আর নিচের বোতাম সরাসরি সেখানেই নিয়ে যায়। হোমে থাকল চার্ট —
+          এক নজরে কয়েক বছরের ফল, যেটিই এখানে দেখার জিনিস। */}
+      {chart && <div data-reveal><ResultChart series={chart} lang={lang} /></div>}
+      <div className="mt-9 text-center">
+        <Btn href="/results" variant="outline" className={`!${v.r}`} iconRight="arrowRight">{t.viewAll}</Btn>
       </div>
     </Section>
   );
@@ -653,8 +692,8 @@ function Clubs({ v, d }: { v: Variant; d: HomeData }) {
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {items.map((c, i) => (
           <div key={c.name + i} data-reveal style={{ ["--reveal-delay" as string]: `${(i % 3) * 60}ms` }}
-            className={`${v.r} border border-n-200 bg-white p-5 flex gap-4 lift`}>
-            <span className={`grid h-11 w-11 shrink-0 place-items-center ${v.r} text-white`}
+            className={`${v.r} border border-n-200 bg-white p-4 sm:p-5 flex gap-3 sm:gap-4 lift`}>
+            <span className={`grid h-6 w-6 sm:h-11 sm:w-11 shrink-0 place-items-center ${v.r} text-white`}
               style={{ background: i % 2 ? "var(--accent-600)" : "var(--brand-600)" }}>
               <Icon name={c.icon || "sparkles"} size={20} />
             </span>
@@ -685,8 +724,10 @@ function Events({ v, d }: { v: Variant; d: HomeData }) {
           <Head v={v} align="left" title={t.secEvents} />
           <div className="space-y-3">
             {d.events.slice(0, 4).map((e) => (
-              <article key={e._id} className={`flex gap-4 ${v.r} border border-n-200 bg-white p-5`}>
-                <span className={`grid h-16 w-16 shrink-0 place-items-center ${v.r} border-2 text-center`}
+              /* h-16 = ১২৮px ছিল; ২৪০px সারিতে গ্যাপসহ ১৬০px খেয়ে
+                 শিরোনামের জন্য রাখত ৮০px। ৬৪px-এ তারিখ এখনো স্পষ্ট। */
+              <article key={e._id} className={`flex gap-3 sm:gap-4 ${v.r} border border-n-200 bg-white p-4 sm:p-5`}>
+                <span className={`grid h-8 w-8 sm:h-16 sm:w-16 shrink-0 place-items-center ${v.r} border-2 text-center`}
                   style={{ borderColor: "var(--brand-600)", color: "var(--brand-700)" }}>
                   <span>
                     <span className="block text-[21px] font-extrabold leading-none tnum">
@@ -719,7 +760,7 @@ function Events({ v, d }: { v: Variant; d: HomeData }) {
           <div className="grid sm:grid-cols-2 gap-4">
             {d.content.campusLife.map((c, i) => (
               <div key={i} data-reveal style={{ ["--reveal-delay" as string]: `${i * 60}ms` }}
-                className={`${v.r} border border-n-200 bg-white p-5`}>
+                className={`${v.r} border border-n-200 bg-white p-4 sm:p-5`}>
                 <span className={`${v.display} text-[26px] font-extrabold text-brand-200 leading-none tnum`}>
                   {num(String(i + 1).padStart(2, "0"), lang)}
                 </span>
@@ -790,7 +831,7 @@ function Testimonials({ v, d }: { v: Variant; d: HomeData }) {
       <div className="snap-row -mx-5 px-5 md:mx-0 md:px-0 md:grid md:grid-cols-2 md:gap-5 md:overflow-visible">
         {d.content.testimonials.slice(0, 4).map((tm, i) => (
           <figure key={i} data-reveal style={{ ["--reveal-delay" as string]: `${(i % 2) * 80}ms` }}
-            className={`w-[86vw] sm:w-[420px] md:w-auto ${v.r} border border-n-200 bg-white p-6 flex gap-4`}>
+            className={`w-[86vw] sm:w-[420px] md:w-auto ${v.r} border border-n-200 bg-white p-4 sm:p-6 flex gap-3 sm:gap-4`}>
             <Avatar src={tm.photo} name={tm.name} size={54} rounded={v.r} />
             <div className="flex-1">
               <div className="flex items-center justify-between gap-3">
@@ -823,8 +864,8 @@ function Admission({ v, tenant, content, lang }: { v: Variant; tenant: TenantX; 
       <div id="process" className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-14">
         {content.admissionSteps.map((s, i) => (
           <div key={i} data-reveal style={{ ["--reveal-delay" as string]: `${i * 60}ms` }}
-            className={`${v.r} border border-n-200 bg-white p-5 text-center`}>
-            <span className="mx-auto grid h-11 w-11 place-items-center rounded-full text-white font-extrabold tnum"
+            className={`${v.r} border border-n-200 bg-white p-4 sm:p-5 text-center`}>
+            <span className="mx-auto grid h-6 w-6 sm:h-11 sm:w-11 place-items-center rounded-full text-white font-extrabold tnum"
               style={{ background: "var(--brand-600)" }}>{num(i + 1, lang)}</span>
             <h3 className="mt-3.5 font-bold text-n-900 text-[15.5px]">{s.title}</h3>
             <p className="mt-1.5 text-[13.5px] text-n-500 leading-relaxed">{s.desc}</p>
@@ -836,9 +877,13 @@ function Admission({ v, tenant, content, lang }: { v: Variant; tenant: TenantX; 
         <div id="timeline">
           <h3 className={`${v.display} t-h3 text-n-900 mb-6`}>{t.admissionTimeline}</h3>
           <div className={`${v.r} border border-n-200 overflow-hidden bg-white`}>
+            {/* ফোনে তারিখ নিজের লাইনে।
+                w-28 মানে এখানে ২২৪px (--spacing দ্বিগুণ) — সারিতে জায়গা
+                ছিল ২৪০px, গ্যাপ ৩২px বাদ দিলে শিরোনাম ও বিবরণের জন্য কিছুই
+                বাকি থাকত না। sm থেকে আগের দুই-কলাম বিন্যাস অপরিবর্তিত। */}
             {content.admissionTimeline.map((tl, i) => (
-              <div key={i} className={`flex gap-4 p-5 ${i ? "border-t border-n-100" : ""}`}>
-                <span className="shrink-0 w-28 font-bold text-brand text-[14px]">{tl.date}</span>
+              <div key={i} className={`flex flex-col gap-1 sm:flex-row sm:gap-4 p-4 sm:p-5 ${i ? "border-t border-n-100" : ""}`}>
+                <span className="shrink-0 sm:w-28 font-bold text-brand text-[14px]">{tl.date}</span>
                 <span>
                   <span className="block font-bold text-n-900">{tl.title}</span>
                   {tl.desc && <span className="block text-[14px] text-n-500 mt-0.5">{tl.desc}</span>}
@@ -854,7 +899,7 @@ function Admission({ v, tenant, content, lang }: { v: Variant; tenant: TenantX; 
           )}
         </div>
 
-        <div id="apply" className={`${v.r} border-2 bg-white p-7`} style={{ borderColor: "var(--brand-600)" }}>
+        <div id="apply" className={`${v.r} border-2 bg-white p-4 sm:p-7`} style={{ borderColor: "var(--brand-600)" }}>
           <h3 className={`${v.display} t-h3 text-n-900`}>{t.applyTitle}</h3>
           <p className="mt-2 text-n-600 text-[15px]">{t.applyDesc}</p>
           <div className="mt-6">
@@ -928,8 +973,8 @@ function FaqContact({ v, tenant, content, lang }: { v: Variant; tenant: TenantX;
             ].filter(Boolean).map((r, i) => {
               const row = r as { icon: string; label: string; value: string; href?: string };
               return (
-                <div key={i} className={`flex gap-4 ${v.r} border border-n-200 bg-white p-5`}>
-                  <span className={`grid h-11 w-11 shrink-0 place-items-center ${v.r} bg-brand-50 text-brand`}>
+                <div key={i} className={`flex gap-3 sm:gap-4 ${v.r} border border-n-200 bg-white p-4 sm:p-5`}>
+                  <span className={`grid h-6 w-6 sm:h-11 sm:w-11 shrink-0 place-items-center ${v.r} bg-brand-50 text-brand`}>
                     <Icon name={row.icon} size={19} />
                   </span>
                   <span>
@@ -941,15 +986,17 @@ function FaqContact({ v, tenant, content, lang }: { v: Variant; tenant: TenantX;
                 </div>
               );
             })}
-            <div className={`${v.r} border-2 bg-white p-6`} style={{ borderColor: "var(--accent-500)" }}>
+            <div className={`${v.r} border-2 bg-white p-4 sm:p-6`} style={{ borderColor: "var(--accent-500)" }}>
               <p className="font-bold text-n-900">{t.formCallbackTitle}</p>
               <p className="mt-1 text-[14.5px] text-n-500 mb-4">{t.formCallbackDesc}</p>
               <InquiryForm action={submitInquiry} kind="callback" compact
                 submitLabel={t.formCallback} labels={formLabels(lang)} />
             </div>
           </div>
-          <div className={`${v.r} overflow-hidden border border-n-200 min-h-[420px]`}>
-            <MapEmbed src={c.mapEmbed} address={c.address} height="h-full min-h-[420px]" />
+          {/* মানচিত্র ফোনে ২৮০px — ৪২০px পর্দার দুই-তৃতীয়াংশ খেয়ে নিত,
+              অথচ তার নিচেই ফুটার ও যোগাযোগের বাকি তথ্য */}
+          <div className={`${v.r} overflow-hidden border border-n-200 min-h-[280px] sm:min-h-[420px]`}>
+            <MapEmbed src={c.mapEmbed} address={c.address} height="h-full min-h-[280px] sm:min-h-[420px]" />
           </div>
         </div>
       </Section>
@@ -975,12 +1022,14 @@ function makeFooter(v: Variant): Template["Footer"] {
         {v.girih && <span className="tex-girih absolute inset-0 opacity-20 pointer-events-none" aria-hidden="true" />}
         {v.chrome === "islamic" && <div className="rule-gold" />}
 
-        <div className="container-x relative py-12 grid gap-9 md:grid-cols-2 lg:grid-cols-[1.7fr_1fr_1fr_1.2fr]">
+        {/* gap-9 = ৭২px; ফোনে চারটি কলাম একটির নিচে আরেকটি বসে বলে
+            সেটি নিছক ২১৬px ফাঁকা জায়গা হয়ে দাঁড়াত */}
+        <div className="container-x relative py-8 md:py-12 grid gap-6 md:gap-9 md:grid-cols-2 lg:grid-cols-[1.7fr_1fr_1fr_1.2fr]">
           <div>
             <div className="flex items-center gap-3">
               {tenant.logo
-                ? <Image src={tenant.logo} alt="" width={56} height={56} className="h-14 w-14 object-contain" />
-                : <span className="h-14 w-14 rounded-full grid place-items-center bg-white/10 text-white text-xl font-extrabold">{tenant.name[0]}</span>}
+                ? <Image src={tenant.logo} alt="" width={56} height={56} className="h-8 w-8 sm:h-14 sm:w-14 object-contain" />
+                : <span className="h-8 w-8 sm:h-14 sm:w-14 rounded-full grid place-items-center bg-white/10 text-white text-xl font-extrabold">{tenant.name[0]}</span>}
               <span className="min-w-0">
                 <span className={`block ${v.display} text-white font-bold text-[18px] leading-tight`}>{tenant.name}</span>
                 {tenant.eiin && <span className="block text-[12.5px] text-white/50 tnum">{t.eiin} {tenant.eiin}</span>}
@@ -991,7 +1040,7 @@ function makeFooter(v: Variant): Template["Footer"] {
               <div className="mt-5 flex gap-2.5">
                 {social.map((s) => (
                   <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}
-                    className="grid h-10 w-10 place-items-center rounded bg-white/10 hover:bg-white/20 text-white transition">
+                    className="grid h-6 w-6 sm:h-10 sm:w-10 place-items-center rounded bg-white/10 hover:bg-white/20 text-white transition">
                     <s.El width={18} height={18} />
                   </a>
                 ))}
@@ -1036,7 +1085,10 @@ function makeFooter(v: Variant): Template["Footer"] {
             <p>{t.poweredBy}: <span className="text-white/70">আমাদের স্কুল</span></p>
           </div>
         </div>
-        <div className="h-[68px] md:hidden" aria-hidden="true" />
+        {/* নিচের ভাসমান কল-বারের সমান ফাঁকা জায়গা, যাতে ফুটারের শেষ
+            লাইন বারটির নিচে চাপা না পড়ে। বার এখন ~৮৮px (প্যাডিং কমেছে,
+            বোতাম ৯৬px → ৫২px), তাই সংখ্যাটিও মিলিয়ে নেওয়া হলো। */}
+        <div className="h-[88px] md:hidden" aria-hidden="true" />
       </footer>
     );
   };
@@ -1076,9 +1128,11 @@ function makeNoticeList(v: Variant): Template["NoticeList"] {
         {notices.length === 0 && <p className="text-center text-n-500 py-10">{t.emptyNotice}</p>}
         <div className={`max-w-4xl mx-auto ${v.r} border border-n-200 bg-white overflow-hidden`}>
           {notices.map((nt, i) => (
+            /* h-14 = ১১২px ছিল — নোটিশের শিরোনামের জন্য থাকত ৯৬px,
+               আর শিরোনামই এই তালিকার একমাত্র কাজের লেখা */
             <TLink key={nt._id} href={`/notice/${nt._id}`}
-              className={`flex gap-4 p-5 hover:bg-brand-50/60 transition ${i ? "border-t border-n-100" : ""}`}>
-              <span className={`grid h-14 w-14 shrink-0 place-items-center ${v.r} border-2 text-center`}
+              className={`flex gap-3 sm:gap-4 p-4 sm:p-5 hover:bg-brand-50/60 transition ${i ? "border-t border-n-100" : ""}`}>
+              <span className={`grid h-8 w-8 sm:h-14 sm:w-14 shrink-0 place-items-center ${v.r} border-2 text-center`}
                 style={{ borderColor: "var(--brand-600)", color: "var(--brand-700)" }}>
                 <span>
                   <span className="block text-[19px] font-extrabold leading-none tnum">
@@ -1107,11 +1161,13 @@ function makeTeacherGrid(v: Variant): Template["TeacherGrid"] {
     return (
       <Section tone="plain">
         {teachers.length === 0 && <p className="text-center text-n-500 py-10">{t.emptyTeachers}</p>}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* হোমের শিক্ষক-ঝলকের মতোই — ফোনে ছোট প্যাডিং, নইলে ১৪০px কার্ডে
+            ছবি ও নামের জন্য থাকত মাত্র ৬০px */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
           {teachers.map((tc) => (
             <figure key={tc._id} className={`lift ${v.r} border border-n-200 bg-white overflow-hidden text-center`}>
-              <div className="p-5 pb-0"><Figure src={tc.photo} alt={tc.name} ratio="aspect-[3/4]" rounded={v.r} icon="users" /></div>
-              <figcaption className="p-5">
+              <div className="p-2.5 pb-0 sm:p-5 sm:pb-0"><Figure src={tc.photo} alt={tc.name} ratio="aspect-[3/4]" rounded={v.r} icon="users" /></div>
+              <figcaption className="p-2.5 sm:p-5">
                 <p className="font-bold text-n-900 leading-tight">{tc.name}</p>
                 <p className="mt-1 text-[13.5px] text-brand font-semibold">{tc.designation}</p>
                 {tc.subject && <p className="mt-0.5 text-[13px] text-n-500">{tc.subject}</p>}
@@ -1143,7 +1199,7 @@ function makeResultList(v: Variant): Template["ResultList"] {
                   <p className="font-bold text-n-900">{r.examName} {r.year && <span className="text-n-400 font-medium">— {r.year}</span>}</p>
                   {r.summary && <p className="text-[14.5px] text-n-500 mt-0.5">{r.summary}</p>}
                 </div>
-                {r.pdfUrl && <Btn href={r.pdfUrl} variant="outline" icon="download" external className={`!min-h-[42px] !px-4 !text-[14px] !${v.r}`}>PDF</Btn>}
+                {r.pdfUrl && <Btn href={r.pdfUrl} variant="outline" icon="download" external className={`!min-h-[48px] !px-4 !text-[14px] !${v.r}`}>PDF</Btn>}
               </div>
             ))}
           </div>
@@ -1227,8 +1283,8 @@ export function makeOfficial(v: Variant): Template {
             ].filter(Boolean).map((r, i) => {
               const row = r as { icon: string; label: string; value: string; href?: string };
               return (
-                <div key={i} className={`flex gap-4 ${v.r} border border-n-200 bg-white p-5`}>
-                  <span className={`grid h-11 w-11 shrink-0 place-items-center ${v.r} bg-brand-50 text-brand`}>
+                <div key={i} className={`flex gap-3 sm:gap-4 ${v.r} border border-n-200 bg-white p-4 sm:p-5`}>
+                  <span className={`grid h-6 w-6 sm:h-11 sm:w-11 shrink-0 place-items-center ${v.r} bg-brand-50 text-brand`}>
                     <Icon name={row.icon} size={19} />
                   </span>
                   <span>
@@ -1240,13 +1296,15 @@ export function makeOfficial(v: Variant): Template {
                 </div>
               );
             })}
-            <div className={`${v.r} border-2 bg-white p-6`} style={{ borderColor: "var(--accent-500)" }}>
+            <div className={`${v.r} border-2 bg-white p-4 sm:p-6`} style={{ borderColor: "var(--accent-500)" }}>
               <p className="font-bold text-n-900 mb-3">{t.sendMessage}</p>
               <InquiryForm action={submitInquiry} kind="contact" submitLabel={t.sendMessage} labels={formLabels(lang)} />
             </div>
           </div>
-          <div className={`${v.r} overflow-hidden border border-n-200 min-h-[420px]`}>
-            <MapEmbed src={c.mapEmbed} address={c.address} height="h-full min-h-[420px]" />
+          {/* মানচিত্র ফোনে ২৮০px — ৪২০px পর্দার দুই-তৃতীয়াংশ খেয়ে নিত,
+              অথচ তার নিচেই ফুটার ও যোগাযোগের বাকি তথ্য */}
+          <div className={`${v.r} overflow-hidden border border-n-200 min-h-[280px] sm:min-h-[420px]`}>
+            <MapEmbed src={c.mapEmbed} address={c.address} height="h-full min-h-[280px] sm:min-h-[420px]" />
           </div>
         </div>
       </Section>

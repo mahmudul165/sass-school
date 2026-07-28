@@ -161,8 +161,14 @@ export function ResultChart({ series, lang = "bn" }: { series: ResultSeries; lan
           <Icon name="chevronDown" size={16} className="transition-transform group-open:rotate-180" />
           {t.showTable}
         </summary>
+        {/* ঘরের প্যাডিং ফোনে ১৬px, ছিল ৩২px (--spacing দ্বিগুণ) — পাঁচটি
+            কলামে সেটি একাই ৩২০px খেয়ে নিত, অর্থাৎ সংখ্যার জন্য কিছুই
+            বাকি থাকত না। overflow-x-auto রেখে দেওয়া হলো ইচ্ছাকৃতভাবে:
+            এটি চার্টেরই বিকল্প পাঠ্যরূপ, details-এর ভিতরে ডিফল্টে বন্ধ,
+            আর পাঁচ কলামের সংখ্যা-ছক ৩৬০px-এ সৎভাবে ভাঁজ করার উপায় নেই —
+            কলাম লুকালে তথ্যই হারিয়ে যায়। উপরের চার্টটিই প্রধান রূপ। */}
         <div className="mt-3 overflow-x-auto rounded-xl border border-n-200 bg-white">
-          <table className="w-full text-left text-[14.5px]">
+          <table className="w-full text-left text-[13px] sm:text-[14.5px] [&_th]:px-2 [&_td]:px-2 sm:[&_th]:px-4 sm:[&_td]:px-4">
             <caption className="sr-only">{series.exam} — {t.resultChartTitle}</caption>
             <thead>
               <tr className="bg-n-50 text-[13.5px] text-n-600">

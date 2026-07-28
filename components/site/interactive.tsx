@@ -8,6 +8,7 @@ import { useActionState, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Icon, WhatsAppIcon, MessengerIcon } from "./icons";
+import { Motion, m, AnimatePresence, useReducedMotion } from "./motion";
 import { toBnDigits, toEnDigits } from "@/lib/digits";
 import { waLink } from "@/lib/utils";
 
@@ -103,6 +104,9 @@ export function MobileNav({ nav, name, logo, phone, whatsapp, accentClass = "bg-
   const L = { open: "মেনু খুলুন", close: "বন্ধ করুন", menu: "প্রধান মেনু", call: "কল করুন", ...labels };
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  /* সিস্টেমে "কম নড়াচড়া" চালু থাকলে সব সময়কাল শূন্য — উপাদান তখনো
+     ঠিক জায়গায় বসে, শুধু পথটুকু বাদ যায় */
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     if (!open) return;
@@ -115,20 +119,36 @@ export function MobileNav({ nav, name, logo, phone, whatsapp, accentClass = "bg-
   }, [open]);
 
   return (
-    <>
+    <Motion>
       <button
         type="button" onClick={() => setOpen(true)}
-        className="lg:hidden inline-grid place-items-center h-11 w-11 rounded-xl hairline bg-white/90 text-n-800"
+        className="lg:hidden inline-grid place-items-center h-6 w-6 rounded-xl hairline bg-white/90 text-n-800"
         aria-label={L.open} aria-expanded={open}
       >
         <Icon name="menu" size={22} />
       </button>
 
-      {open && (
-        <div className="fixed inset-0 z-[70] lg:hidden" role="dialog" aria-modal="true" aria-label={L.menu}>
-          <button className="absolute inset-0 bg-n-900/55 backdrop-blur-sm" aria-label={L.close} onClick={() => setOpen(false)} />
-          <div ref={panelRef} className="absolute inset-y-0 right-0 w-[86%] max-w-sm bg-white shadow-2xl flex flex-col animate-[slideIn_.28s_cubic-bezier(.22,1,.36,1)]">
-            <style>{`@keyframes slideIn{from{transform:translateX(100%)}to{transform:none}}`}</style>
+      {/* ড্রয়ারের প্রস্থান-অ্যানিমেশন — আগে ছিল না।
+          খোলার সময় একটি ইনলাইন @keyframes দিয়ে প্যানেলটি ডান থেকে ঢুকত,
+          কিন্তু বন্ধ করলে `{open && …}` সঙ্গে সঙ্গে DOM থেকে সরিয়ে দিত —
+          অর্থাৎ ড্রয়ার হুট করে উবে যেত। ছোট পর্দায় সেটি দিশা হারানোর
+          মতো: কোথা থেকে এলাম, কোথায় ফিরলাম বোঝা যায় না।
+          AnimatePresence প্রস্থানটুকু ধরে রাখে, তাই প্যানেলটি যেদিক
+          থেকে এসেছিল সেদিকেই ফিরে যায় — জায়গার বোধ অটুট থাকে।
+          সেই ইনলাইন <style> ট্যাগটিও আর লাগছে না। */}
+      <AnimatePresence>
+        {open && (
+          <m.div key="drawer" className="fixed inset-0 z-[70] lg:hidden" role="dialog" aria-modal="true" aria-label={L.menu}>
+            <m.button
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ duration: reduced ? 0 : 0.2 }}
+              className="absolute inset-0 bg-n-900/55 backdrop-blur-sm" aria-label={L.close} onClick={() => setOpen(false)} />
+            <m.div ref={panelRef}
+              initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
+              /* tween, spring নয় — স্প্রিং-এর শেষের দুলুনি কম-ক্ষমতার
+                 ফোনে ফ্রেম ফেলে দেয়, আর ২৮০ms-এ সেটি চোখেও পড়ে না */
+              transition={reduced ? { duration: 0 } : { type: "tween", ease: [0.22, 1, 0.36, 1], duration: 0.28 }}
+              className="absolute inset-y-0 right-0 w-[86%] max-w-sm bg-white shadow-2xl flex flex-col">
             <div className="flex items-center gap-3 p-4 border-b border-n-200">
               {logo ? <Image src={logo} alt="" width={40} height={40} className="h-10 w-10 rounded-lg object-contain" />
                 : <span className={`h-10 w-10 rounded-lg grid place-items-center text-white font-bold ${accentClass}`}>{name[0]}</span>}
@@ -167,21 +187,22 @@ export function MobileNav({ nav, name, logo, phone, whatsapp, accentClass = "bg-
 
             <div className="p-4 border-t border-n-200 grid grid-cols-2 gap-2.5">
               {phone && (
-                <a href={`tel:${phone}`} className={`flex items-center justify-center gap-2 h-12 rounded-xl text-white font-bold ${accentClass}`}>
+                <a href={`tel:${phone}`} className={`flex items-center justify-center gap-2 min-h-[52px] rounded-xl text-white font-bold ${accentClass}`}>
                   <Icon name="phone" size={18} /> {L.call}
                 </a>
               )}
               {whatsapp && (
                 <a href={waLink(whatsapp)} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 h-12 rounded-xl text-white font-bold" style={{ background: "#25D366" }}>
+                  className="flex items-center justify-center gap-2 min-h-[52px] rounded-xl text-white font-bold" style={{ background: "#25D366" }}>
                   <WhatsAppIcon width={18} height={18} /> WhatsApp
                 </a>
               )}
             </div>
-          </div>
-        </div>
-      )}
-    </>
+            </m.div>
+          </m.div>
+        )}
+      </AnimatePresence>
+    </Motion>
   );
 }
 
@@ -200,6 +221,7 @@ export function FloatingActions({ phone, whatsapp, messenger, waText, labels, ba
 }) {
   const L = { call: "এখনই কল করুন", admission: "ভর্তি তথ্য", top: "উপরে যান", ...labels };
   const [up, setUp] = useState(false);
+  const reduced = useReducedMotion();
   useEffect(() => {
     const on = () => setUp(window.scrollY > 700);
     on();
@@ -208,44 +230,70 @@ export function FloatingActions({ phone, whatsapp, messenger, waText, labels, ba
   }, []);
 
   return (
-    <>
-      {/* ডেস্কটপ ও মোবাইল — ডান পাশে স্তম্ভ */}
-      <div className="no-print fixed right-3 bottom-20 md:bottom-6 z-50 flex flex-col gap-2.5 items-end">
+    <Motion>
+      {/* ডেস্কটপ ও মোবাইল — ডান পাশে স্তম্ভ
+
+          মাপগুলো ছোট করা হলো। এই প্রকল্পে --spacing দ্বিগুণ, তাই h-14 মানে
+          ছিল ১১২px, h-12 মানে ৯৬px — অর্থাৎ ভাসমান বোতামগুলো ৩৬০px পর্দার
+          এক-তৃতীয়াংশ চওড়া হয়ে বসে থাকত, আর নিচের কল-বার মিলে পাতার
+          প্রায় ২০% স্থায়ীভাবে ঢেকে রাখত। এখন সবগুলোই ৪৮–৫৬px — আঙুলের
+          জন্য যথেষ্ট বড়, কিন্তু কনটেন্ট আর ঢাকা পড়ে না।
+
+          bottom-13 (=১০৪px) — নিচের কল-বারের ঠিক উপরে, তার সাথে ঠোকাঠুকি নয়। */}
+      <div className="no-print fixed right-2.5 bottom-13 md:bottom-6 z-50 flex flex-col gap-2 items-end">
+        {/* "উপরে যান" বোতামটি ৭০০px স্ক্রলে হাজির হয় ও অদৃশ্য হয়।
+            আগে সেটি এক ফ্রেমে ঝাঁপ দিয়ে আসত-যেত — চোখের কোণে হঠাৎ
+            নড়াচড়া, যা মনোযোগ কেড়ে নেয় অথচ কোনো তথ্য দেয় না।
+            এখন ছোট স্কেল+ফেড, তাই উপস্থিতিটুকু জানান দেয়, চমকায় না। */}
+        <AnimatePresence>
         {up && (
-          <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          <m.button key="top" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             aria-label={L.top}
-            className="h-11 w-11 rounded-full glass hairline text-n-700 grid place-items-center shadow-lg hover:text-brand transition">
+            initial={{ opacity: 0, scale: reduced ? 1 : 0.6 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: reduced ? 1 : 0.6 }}
+            transition={{ duration: reduced ? 0 : 0.18, ease: [0.22, 1, 0.36, 1] }}
+            className="h-6 w-6 rounded-full glass hairline text-n-700 grid place-items-center shadow-lg hover:text-brand transition">
             <Icon name="chevronDown" size={20} className="rotate-180" />
-          </button>
+          </m.button>
         )}
+        </AnimatePresence>
         {messenger && (
           <a href={messenger} target="_blank" rel="noopener noreferrer" aria-label="Messenger-এ বার্তা"
-            className="h-12 w-12 rounded-full grid place-items-center text-white shadow-lg hover:scale-105 transition"
+            className="h-7 w-7 rounded-full grid place-items-center text-white shadow-lg hover:scale-105 transition"
             style={{ background: "linear-gradient(135deg,#00B2FF,#006AFF)" }}>
             <MessengerIcon width={24} height={24} />
           </a>
         )}
         {whatsapp && (
           <a href={waLink(whatsapp, waText)} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp-এ যোগাযোগ"
-            className="anim-ring h-14 w-14 rounded-full grid place-items-center text-white shadow-xl hover:scale-105 transition"
+            className="anim-ring h-7 w-7 rounded-full grid place-items-center text-white shadow-xl hover:scale-105 transition"
             style={{ background: "#25D366" }}>
             <WhatsAppIcon width={28} height={28} />
           </a>
         )}
       </div>
 
-      {/* মোবাইল — নিচে স্থায়ী কল-বার (থাম্বের ঠিক নিচে) */}
+      {/* মোবাইল — নিচে স্থায়ী কল-বার (থাম্বের ঠিক নিচে)
+          h-12 (=৯৬px) বোতাম ছিল; বার-টি প্যাডিং মিলে ~১৩৬px উঁচু হতো।
+          min-h-[52px] রাখায় লক্ষ্য এখনো বড়, কিন্তু বার ~৯২px।
+          env(safe-area-inset-bottom) আগে থেকেই ঠিক ছিল — iPhone-এর হোম
+          ইন্ডিকেটরের নিচে বোতাম চলে যেত না। */}
       {phone && (
-        <div className="no-print md:hidden fixed inset-x-0 bottom-0 z-40 glass border-t border-n-200 px-3 py-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] flex gap-2.5">
-          <a href={`tel:${phone}`} className="flex-1 h-12 rounded-xl bg-brand text-brand-on font-bold grid place-items-center">
+        <div className="no-print md:hidden fixed inset-x-0 bottom-0 z-40 glass border-t border-n-200 px-3 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] flex gap-2">
+          <a href={`tel:${phone}`} className="flex-1 min-h-[52px] rounded-xl bg-brand text-brand-on font-bold grid place-items-center">
             <span className="flex items-center gap-2"><Icon name="phone" size={18} /> {L.call}</span>
           </a>
-          <Link href={`${base}/admission`} className="h-12 px-5 rounded-xl bg-accent text-accent-on font-bold grid place-items-center whitespace-nowrap">
+          {/* shrink-0 — পাশের কল-বোতামটি flex-1, আর এটির লেখা nowrap।
+              `* { min-width: 0 }` বসার পর এটি নিজের কনটেন্টের চেয়ে ছোট
+              হতে পারত, তখন "ভর্তি তথ্য" লেখাটি বোতামের বাইরে উপচে পড়ত —
+              ঠিক যে কারণে উপরের নোটিশ-টিকারটি ভেঙেছিল। */}
+          <Link href={`${base}/admission`} className="shrink-0 min-h-[52px] px-4 rounded-xl bg-accent text-accent-on font-bold grid place-items-center whitespace-nowrap">
             {L.admission}
           </Link>
         </div>
       )}
-    </>
+    </Motion>
   );
 }
 
@@ -313,6 +361,7 @@ export function Lightbox({ images, children, className = "" }: {
 }) {
   const [idx, setIdx] = useState<number | null>(null);
   const open = idx !== null;
+  const reduced = useReducedMotion();
 
   const onClick = (e: React.MouseEvent) => {
     const el = (e.target as HTMLElement).closest?.("[data-lb]");
@@ -335,43 +384,65 @@ export function Lightbox({ images, children, className = "" }: {
   }, [open, images.length]);
 
   return (
-    <>
+    <Motion>
       <div className={className} onClick={onClick}>{children}</div>
+      {/* লাইটবক্সও আগে হুট করে খুলত ও হুট করে মিলিয়ে যেত। পর্দাজোড়া
+          কালো পটভূমি হঠাৎ বসলে চোখে ধাক্কা লাগে; সামান্য ফেড সেটিকে
+          "খুলছে" বলে বোঝায়। ছবিটি সঙ্গে সঙ্গে সামান্য বড় হয়ে বসে —
+          কোন থাম্বনেইল থেকে এল, সেই সূত্রটি ধরে রাখে। */}
+      <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-[80] bg-n-900/95 grid place-items-center p-4" role="dialog" aria-modal="true" aria-label="ছবি">
+        <m.div key="lightbox"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          transition={{ duration: reduced ? 0 : 0.18 }}
+          className="fixed inset-0 z-[80] bg-n-900/95 grid place-items-center p-4" role="dialog" aria-modal="true" aria-label="ছবি">
           <button className="absolute inset-0" aria-label="বন্ধ করুন" onClick={() => setIdx(null)} />
+          {/* h-12 w-12 = ৯৬px ছিল (দ্বিগুণ --spacing)। ৩৬০px পর্দায় দুই পাশের
+              তীর মিলে ১৯২px — ছবির অর্ধেকের বেশি ঢেকে যেত। ৫৬px যথেষ্ট বড়,
+              আর ছবিটাই আবার মূল জিনিস হয়ে ওঠে। */}
           <button onClick={() => setIdx(null)} aria-label="বন্ধ করুন"
-            className="absolute top-4 right-4 h-12 w-12 rounded-full glass-dark text-white grid place-items-center z-10">
+            className="absolute top-3 right-3 h-7 w-7 rounded-full glass-dark text-white grid place-items-center z-10">
             <Icon name="x" size={24} />
           </button>
           {images.length > 1 && (
             <>
               <button onClick={() => setIdx((i) => (i! - 1 + images.length) % images.length)} aria-label="আগের ছবি"
-                className="absolute left-2 md:left-6 h-12 w-12 rounded-full glass-dark text-white grid place-items-center z-10">
+                className="absolute left-1.5 md:left-6 h-7 w-7 rounded-full glass-dark text-white grid place-items-center z-10">
                 <Icon name="chevronLeft" size={24} />
               </button>
               <button onClick={() => setIdx((i) => (i! + 1) % images.length)} aria-label="পরের ছবি"
-                className="absolute right-2 md:right-6 h-12 w-12 rounded-full glass-dark text-white grid place-items-center z-10">
+                className="absolute right-1.5 md:right-6 h-7 w-7 rounded-full glass-dark text-white grid place-items-center z-10">
                 <Icon name="chevronRight" size={24} />
               </button>
             </>
           )}
-          <figure className="relative z-[1] max-w-5xl w-full text-center pointer-events-none">
+          {/* key={idx} — তীর চাপলে পুরোনো ছবি মিলিয়ে গিয়ে নতুনটি আসে।
+              আগে src বদলে যেত, ফলে ধীর সংযোগে এক মুহূর্তের জন্য ফাঁকা
+              ঘর দেখা যেত এবং "কিছু ভাঙল" মনে হতো। */}
+          <m.figure key={idx}
+            initial={{ opacity: 0, scale: reduced ? 1 : 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: reduced ? 0 : 0.22, ease: [0.22, 1, 0.36, 1] }}
+            className="relative z-[1] max-w-5xl w-full text-center pointer-events-none">
             {/* ইচ্ছাকৃতভাবে কাঁচা <img> — লাইটবক্সে ছবিটি নিজের অনুপাতে
                 (w-auto, max-h-78vh) বসে, তাই আগে থেকে width/height জানা নেই
                 আর `fill`-এর জন্য মাপ-নির্দিষ্ট মোড়কও নেই। এটি দর্শকের
                 ক্লিকে খোলে, প্রথম লোডে নয় — তাই LCP-তে কোনো প্রভাব নেই এবং
                 রূপান্তরের ঝুঁকি নেওয়ার মতো লাভও নেই। */}
+            {/* dvh, vh নয় — মোবাইল ব্রাউজারের ঠিকানা-পট্টি দেখা গেলে vh
+                আসল দৃশ্যমান উচ্চতার চেয়ে বড় হয়, ফলে ছবির নিচটা ও ক্যাপশন
+                পর্দার বাইরে চলে যেত */}
             <img src={images[idx!].url} alt={images[idx!].caption || ""}
-              className="max-h-[78vh] w-auto mx-auto rounded-xl object-contain shadow-2xl" />
+              className="max-h-[72dvh] w-auto mx-auto rounded-xl object-contain shadow-2xl" />
             <figcaption className="mt-4 text-white/85 text-sm">
               {images[idx!].caption}
               <span className="block text-white/50 mt-1 tnum">{toBnDigits(String(idx! + 1))} / {toBnDigits(String(images.length))}</span>
             </figcaption>
-          </figure>
-        </div>
+          </m.figure>
+        </m.div>
       )}
-    </>
+      </AnimatePresence>
+    </Motion>
   );
 }
 
@@ -396,7 +467,7 @@ export function VideoEmbed({ youtubeId, title }: { youtubeId: string; title: str
         className="object-cover transition duration-500 group-hover:scale-105" />
       <span className="absolute inset-0 bg-n-900/25 group-hover:bg-n-900/10 transition" />
       <span className="absolute inset-0 grid place-items-center">
-        <span className="h-16 w-16 rounded-full grid place-items-center shadow-xl transition group-hover:scale-110"
+        <span className="h-9 w-9 sm:h-16 sm:w-16 rounded-full grid place-items-center shadow-xl transition group-hover:scale-110"
           style={{ background: "rgba(255,255,255,.94)" }}>
           <Icon name="play" size={26} className="text-brand translate-x-0.5" />
         </span>
@@ -433,22 +504,41 @@ export function ResultSearch({ exams, note, labels }: {
     setMsg(L.notPublished);
   };
 
+  const rsField = "w-full min-h-[52px] px-3.5 rounded-xl border border-n-300 bg-white text-n-800 focus:border-brand";
+  const rsLab = "mb-1.5 block text-[14.5px] font-semibold text-n-700";
+
   return (
-    <form onSubmit={submit} className="grid sm:grid-cols-[1fr_1fr_auto] gap-3">
+    /* তিন কলাম কেবল lg থেকে, sm থেকে নয়।
+       ব্রেকপয়েন্ট পর্দার মাপ দেখে, পাত্রের নয় — আর এই ফর্মটি প্রায়ই সরু
+       পাত্রে বসে। ৭০০px পর্দায় sm সক্রিয় হয়ে তিনটি কলাম তৈরি করত, অথচ
+       পাত্র হয়তো ৩৪০px; "ফলাফল দেখুন" বোতামটি auto কলামে নিজের মাপ নিত,
+       বাকি ~১৫০px দুই ভাগ হয়ে প্রতিটি ঘরে থাকত ~৭৫px — প্যাডিং বাদ দিলে
+       লেখার জায়গা প্রায় শূন্য, ঘর দুটি ছোট গোল বোতামের মতো দেখাত।
+       lg-তে পাত্র নিশ্চিতভাবে চওড়া, তাই সেখানেই তিন কলাম নিরাপদ।
+       items-end — লেবেল যোগ হওয়ায় ঘরগুলো লম্বা, বোতাম নিচের প্রান্তে মেলে। */
+    <form onSubmit={submit} className="grid lg:grid-cols-[1fr_1fr_auto] lg:items-end gap-3">
       <label className="block">
-        <span className="sr-only">{L.exam}</span>
+        {/* এই তিনটি লেবেলও sr-only ছিল। ফলাফল দেখার ঘরে দর্শক প্রায়ই
+            উদ্বিগ্ন ও তাড়াহুড়োয় থাকেন — সেখানে "কোন ঘরে রোল, কোনটায়
+            পরীক্ষা" অনুমান করতে দেওয়া চলে না। */}
+        <span className={rsLab}>{L.exam}</span>
         <select value={exam} onChange={(e) => setExam(e.target.value)}
-          className="w-full h-13 min-h-[52px] px-4 rounded-xl border border-n-300 bg-white text-n-800 font-medium focus:border-brand">
+          className={`${rsField} font-medium`}>
           {exams.length === 0 && <option>{L.empty}</option>}
           {exams.map((e) => <option key={e._id} value={e._id}>{e.examName} {e.year ? `— ${e.year}` : ""}</option>)}
         </select>
       </label>
       <label className="block">
-        <span className="sr-only">{L.roll}</span>
-        <input value={roll} onChange={(e) => setRoll(e.target.value)} inputMode="numeric" placeholder={L.roll}
-          className="w-full h-13 min-h-[52px] px-4 rounded-xl border border-n-300 bg-white text-n-800 placeholder:text-n-400 focus:border-brand" />
+        <span className={rsLab}>{L.roll}</span>
+        <input value={roll} onChange={(e) => setRoll(e.target.value)} inputMode="numeric"
+          className={`${rsField} placeholder:text-n-400`} />
       </label>
-      <button className="h-13 min-h-[52px] px-7 rounded-xl bg-brand text-brand-on font-bold inline-flex items-center justify-center gap-2">
+      {/* h-13 ছিল — এই প্রকল্পে --spacing দ্বিগুণ, তাই সেটি ৫২px নয়,
+          ১০৪px উঁচু হতো; পাশের min-h-[52px] নিছক মৃত কোড ছিল। তিনটি ঘর
+          মিলে ফোনে ৩১২px উচ্চতা খেয়ে নিত। এখন min-height-ই উচ্চতা ঠিক
+          করে, লেখা বড় হলে ঘরও বাড়তে পারে।
+          মোবাইলে বোতাম পুরো প্রস্থে — এক হাতে বুড়ো আঙুলের সবচেয়ে সহজ লক্ষ্য। */}
+      <button className="w-full min-h-[52px] px-6 rounded-xl bg-brand text-brand-on font-bold inline-flex items-center justify-center gap-2">
         <Icon name="search" size={18} /> {L.view}
       </button>
       {(msg || note) && (
@@ -485,7 +575,7 @@ export function InquiryForm({
   if (state?.ok) {
     return (
       <div className="rounded-2xl border border-n-200 bg-white p-8 text-center" role="status">
-        <span className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-brand-50 text-brand">
+        <span className="mx-auto mb-4 grid h-8 w-8 sm:h-14 sm:w-14 place-items-center rounded-full bg-brand-50 text-brand">
           <Icon name="check" size={30} />
         </span>
         <p className="t-h3 text-n-900">{L.thanks}</p>
@@ -494,7 +584,19 @@ export function InquiryForm({
     );
   }
 
-  const field = "w-full min-h-[52px] px-4 rounded-xl border border-n-300 bg-white text-n-800 placeholder:text-n-400 focus:border-brand transition";
+  /* px-4 = ৩২px দুই পাশে ছিল। ৩৬০px ফোনে কার্ডের প্যাডিংয়ের পর ইনপুটের
+     ভেতরে লেখার জায়গা থাকত ~১৬০px। ২৮px যথেষ্ট শ্বাস দেয়, জায়গা খায় না। */
+  const field = "w-full min-h-[52px] px-3.5 rounded-xl border border-n-300 bg-white text-n-800 placeholder:text-n-400 focus:border-brand transition";
+
+  /* লেবেল এখন সবসময় দৃশ্যমান।
+     আগে sr-only ছিল, দেখা যেত কেবল placeholder — কিন্তু placeholder ফোকাস
+     করলেই মিলিয়ে যায়। অর্ধেক ভরা ফর্মে ফিরে এসে কোন ঘরে কী ছিল তা আর
+     জানার উপায় থাকত না, আর ভুল হলে কোথায় ভুল তাও বোঝা যেত না। যে দর্শক
+     ফর্মে অনভ্যস্ত, তাঁর কাছে এটিই ফর্ম ছেড়ে দেওয়ার সবচেয়ে বড় কারণ।
+
+     লেখা এক বর্ণও বদলায়নি — একই স্ট্রিং placeholder থেকে দৃশ্যমান লেবেলে
+     সরানো হলো, তাই একই কথা দুবার দেখায় না। */
+  const lab = "mb-1.5 block text-[14.5px] font-semibold text-n-700";
 
   return (
     <form action={formAction} className={compact ? "space-y-3" : "space-y-4"}>
@@ -504,19 +606,21 @@ export function InquiryForm({
 
       <div className={compact ? "space-y-3" : "grid sm:grid-cols-2 gap-4"}>
         <label className="block">
-          <span className="sr-only">{L.name}</span>
-          <input name="name" required placeholder={L.name} className={field} />
+          <span className={lab}>{L.name}</span>
+          <input name="name" required autoComplete="name" className={field} />
         </label>
         <label className="block">
-          <span className="sr-only">{L.phone}</span>
-          <input name="phone" required inputMode="tel" pattern="[0-9০-৯\s\-\+]{11,17}"
-            placeholder={L.phone} className={field} />
+          <span className={lab}>{L.phone}</span>
+          {/* type="tel" — অ্যান্ড্রয়েডে সংখ্যার কীপ্যাড আসে; autoComplete
+              থাকায় নিজের নম্বর আবার হাতে লিখতে হয় না */}
+          <input name="phone" required type="tel" inputMode="tel" autoComplete="tel"
+            pattern="[0-9০-৯\s\-\+]{11,17}" className={field} />
         </label>
       </div>
 
       {options.length > 0 && (
         <label className="block">
-          <span className="sr-only">{L.selectClass}</span>
+          <span className={lab}>{L.selectClass}</span>
           <select name="studentClass" className={field} defaultValue="">
             <option value="">{L.selectClass}</option>
             {options.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -526,13 +630,18 @@ export function InquiryForm({
 
       {!compact && (
         <label className="block">
-          <span className="sr-only">{L.message}</span>
-          <textarea name="message" rows={3} placeholder={L.message} className={`${field} py-3 resize-y`} />
+          <span className={lab}>{L.message}</span>
+          <textarea name="message" rows={3} className={`${field} py-3 resize-y`} />
         </label>
       )}
 
+      {/* ভুলের বার্তা শুধু রঙে নয় — রঙান্ধতায় ও রোদে ধরা সস্তা পর্দায়
+          লাল আলাদা করা যায় না, তাই আইকনও সঙ্গে থাকে */}
       {state && !state.ok && (
-        <p className="text-sm font-medium text-red-600" role="alert">{state.message}</p>
+        <p className="flex items-start gap-2 text-sm font-medium text-red-600" role="alert">
+          <Icon name="alert" size={17} className="mt-0.5 shrink-0" />
+          <span>{state.message}</span>
+        </p>
       )}
 
       <button disabled={pending}
